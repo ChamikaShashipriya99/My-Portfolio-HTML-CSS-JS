@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Chamika Shashipriya Kumarathunga Portfolio</title>
+    <title>Skills - Chamika Shashipriya Portfolio</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -20,12 +20,35 @@
     <!--Links to font awesome for inserting icons-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
+    <!-- Devicon for technology brand icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    
     <!-- AOS (Animate On Scroll) Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!--Background Effects-->
+    <div class="background-effects">
+        <div class="animated-lines">
+            <div class="line line-1"></div>
+            <div class="line line-2"></div>
+            <div class="line line-3"></div>
+            <div class="line line-4"></div>
+        </div>
+        <div class="geometric-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
+        <div class="wave-effect wave-1"></div>
+        <div class="wave-effect wave-2"></div>
+        <div class="glow-spot spot-1"></div>
+        <div class="glow-spot spot-2"></div>
+    </div>
+    
     <!--nav bar-->
     <nav class="navbar">
         <a href="index.html" class="logo">PORT<span>FOLIO</span></a>
@@ -35,117 +58,25 @@
         <div class="nav-links">
             <a href="index.html#hero" class="nav-link">Home</a>
             <a href="about.html" class="nav-link">About</a>
-            <a href="skills.html" class="nav-link">Skills</a>
+            <a href="skills.html" class="nav-link active">Skills</a>
             <a href="experience.html" class="nav-link">Experience</a>
             <a href="projects.html" class="nav-link">Projects</a>
-            <a href="contact.html" class="nav-link active">Contact</a>
+            <a href="contact.html" class="nav-link">Contact</a>
         </div>
     </nav>
 
-    <!--Contact section-->
-    <section id="contact" class="contact-section">
+    <!--Skills section-->
+    <section id="skills" class="skills-section">
         <div class="container">
-            <div class="contact-header" data-aos="fade-up" data-aos-duration="1000">
-                <h1 class="section-title">Get In <span>Touch</span></h1>
+            <div class="skills-header" data-aos="fade-up" data-aos-duration="1000">
+                <h1 class="section-title">My <span>Skills</span></h1>
                 <div class="title-underline"></div>
-                <p class="contact-subtitle">Have a project in mind or want to collaborate? I'd love to hear from you!</p>
+                <p class="skills-subtitle">Technologies and tools I use to bring ideas to life</p>
             </div>
 
-            <div class="contact-content">
-                <!--Contact Information-->
-                <div class="contact-info contact-card" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
-                    <h2>Let's Connect</h2>
-                    <p class="info-description">Feel free to reach out through any of these channels. I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.</p>
-                    
-                    <div class="info-items">
-                        <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fa-solid fa-envelope"></i>
-                            </div>
-                            <div class="info-details">
-                                <h3>Email</h3>
-                                <a href="mailto:chamikashashipriya3@gmail.com">chamikashashipriya3@gmail.com</a>
-                            </div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fa-solid fa-phone"></i>
-                            </div>
-                            <div class="info-details">
-                                <h3>Phone</h3>
-                                <a href="tel:+94704120358">+94 70 412 0358</a>
-                            </div>
-                        </div>
-
-                        <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fa-solid fa-location-dot"></i>
-                            </div>
-                            <div class="info-details">
-                                <h3>Location</h3>
-                                <p>Ambalangoda, Sri Lanka</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="social-section">
-                        <h3 class="follow-me-heading">Follow Me</h3>
-                        <div class="social-links">
-                            <a href="https://github.com/ChamikaShashipriya99" class="social-link social-github" target="_blank" title="GitHub">
-                                <i class="fa-brands fa-github"></i>
-                            </a>
-                            <a href="https://www.linkedin.com/in/chamika-shashipriya-722366321?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link social-linkedin" target="_blank" title="LinkedIn">
-                                <i class="fa-brands fa-linkedin"></i>
-                            </a>
-                            <a href="404.html" class="social-link social-facebook" title="Facebook">
-                                <i class="fa-brands fa-facebook-f"></i>
-                            </a>
-                            <a href="404.html" class="social-link social-twitter" title="Twitter">
-                                <i class="fa-brands fa-x-twitter"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Contact Form-->
-                <div class="contact-form-container contact-card" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
-                    <form id="contactForm" class="contact-form">
-                        <div class="form-group">
-                            <label for="name">
-                                <i class="fa-solid fa-user"></i>Full Name
-                            </label>
-                            <input type="text" id="name" name="name" placeholder="Enter your name" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">
-                                <i class="fa-solid fa-envelope"></i>Email Address
-                            </label>
-                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="subject">
-                                <i class="fa-solid fa-tag"></i>Subject
-                            </label>
-                            <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="message">
-                                <i class="fa-solid fa-message"></i>Message
-                            </label>
-                            <textarea id="message" name="message" rows="6" placeholder="Tell me about your project or inquiry..." required></textarea>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary submit-btn">
-                            <i class="fa-solid fa-paper-plane"></i>Send Message
-                        </button>
-
-                        <div id="formMessage" class="form-message"></div>
-                    </form>
-                </div>
+            <!--Skills container (will be populated by JavaScript)-->
+            <div id="skills-container" class="skills-container">
+                <!-- Skills will be dynamically inserted here -->
             </div>
         </div>
     </section>
@@ -267,7 +198,7 @@
     
     <!--link to js files-->
     <script src="js/script.js"></script>
-    <script src="js/contact.js"></script>
+    <script src="js/skills.js"></script>
 </body>
 </html>
 
