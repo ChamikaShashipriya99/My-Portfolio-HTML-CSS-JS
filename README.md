@@ -260,21 +260,6 @@ The website uses these breakpoints:
 3. Select branch and folder (usually `main` and `/root`)
 4. Your site will be live at `https://username.github.io/repository-name`
 
-### Netlify
-1. Drag and drop the folder to [Netlify Drop](https://app.netlify.com/drop)
-2. Or connect your GitHub repository
-3. Auto-deploy on push
-
-### Vercel
-1. Install Vercel CLI: `npm i -g vercel`
-2. Run `vercel` in project directory
-3. Follow prompts
-
-### Custom Domain
-1. Purchase a domain
-2. Configure DNS settings
-3. Point domain to hosting provider
-
 ## 📊 Performance Tips
 
 - Images are optimized - ensure profile images are compressed
@@ -327,10 +312,6 @@ This project is open source and available for personal use. Feel free to customi
 - [Font Awesome](https://fontawesome.com/) - Icons
 - [Google Fonts](https://fonts.google.com/) - Typography
 - [GitHub API](https://docs.github.com/en/rest) - Project integration
-
-## 📅 Last Updated
-
-January 2025
 
 ---
 
