@@ -78,6 +78,35 @@ document.addEventListener('DOMContentLoaded', function(){
         }, 500);
     }
     
+    // Back to Top Button Functionality
+    const backToTopButton = document.getElementById('backToTop');
+    
+    if (backToTopButton) {
+        // Show/hide button based on scroll position
+        function toggleBackToTop() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        }
+        
+        // Scroll to top function
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // Event listeners
+        window.addEventListener('scroll', toggleBackToTop);
+        backToTopButton.addEventListener('click', scrollToTop);
+        
+        // Initial check on page load
+        toggleBackToTop();
+    }
+    
     const profileWrapper = document.querySelector('.profile-wrapper');
     const particleCount = 30;
 
