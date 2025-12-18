@@ -385,7 +385,7 @@ footer{
     gap: 60px;
 }
 
-.hero-content{
+.hero-wrapper{
     display: -ms-grid;
     display: grid;
     -ms-grid-columns: 1fr 1fr;
@@ -394,7 +394,22 @@ footer{
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    width: 100%; 
+    width: 100%;
+}
+
+/* Desktop/Tablet: Content on left, Image on right (default grid order) */
+.profile-container{
+    order: 2; /* Image on right */
+    justify-content: flex-end;
+}
+
+.hero-content{
+    width: 100%;
+    order: 1; /* Content on left */
+}
+
+.hero-text{
+    text-align: left;
 }
 
 .hero-text{
@@ -522,6 +537,8 @@ p{
     justify-content: flex-end;
     align-items: center;
     perspective: 1000px;
+    overflow: visible;
+    max-width: 100%;
 }
 
 .profile-wrapper{
@@ -1213,6 +1230,91 @@ p{
     
     .about-image-container{
         margin-bottom: 40px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    /* Ensure about page image has same animations on mobile */
+    .about-image-container .about-profile-wrapper{
+        animation: aboutFloat 6s ease-in-out infinite !important;
+    }
+    
+    .about-image-container .about-profile-img{
+        border-radius: 20px !important;
+        border: 5px solid var(--neon-red) !important;
+        box-shadow: 
+            0 0 40px var(--neon-red),
+            0 0 80px rgba(0,240,255,0.4),
+            inset 0 0 20px rgba(0,240,255,0.1) !important;
+        animation: aboutGlow 5s ease-in-out infinite, aboutSlide 10s ease-in-out infinite !important;
+        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .about-image-container .about-profile-img:hover{
+        clip-path: polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%) !important;
+        border-color: var(--neon-pink) !important;
+    }
+    
+    /* Ensure all about page elements have exact desktop styles on mobile */
+    .about-image-container .about-glow-effect{
+        position: absolute;
+        width: 110%;
+        height: 110%;
+        top: -5%;
+        left: -5%;
+        border-radius: 20px;
+        background: linear-gradient(135deg, var(--neon-red), var(--neon-pink)) !important;
+        filter: blur(60px);
+        opacity: 0.3;
+        z-index: 1;
+        animation: aboutPulse 4s ease-in-out infinite !important;
+        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+        pointer-events: none;
+    }
+    
+    .about-image-container .hexagon-border{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        width: 105%;
+        height: 105%;
+        border: 4px solid var(--neon-red);
+        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+        animation: hexagonRotate 8s linear infinite, hexagonGlow 3s ease-in-out infinite !important;
+        z-index: 2;
+        pointer-events: none;
+    }
+    
+    .about-image-container .hexagon-border::before{
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        width: 95%;
+        height: 95%;
+        border: 2px solid var(--neon-pink);
+        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+        animation: hexagonRotateReverse 6s linear infinite !important;
+    }
+    
+    .about-image-container .scanning-line{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, var(--neon-red), transparent);
+        animation: scanLine 3s linear infinite !important;
+        z-index: 4;
+        pointer-events: none;
+        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
     }
     
     .about-text{
@@ -3740,10 +3842,32 @@ footer{
         justify-content: center;
     }
     
-    .profile-wrapper{
+    .profile-wrapper,
+    .about-profile-wrapper,
+    .hero-profile-wrapper{
         width: 280px;
         height: 280px;
         margin: 0 auto;
+        max-width: 100%;
+        overflow: visible;
+    }
+    
+    .profile-container{
+        width: 100%;
+        max-width: 100%;
+        overflow: visible;
+        padding: 0 20px;
+        margin: 0 auto;
+    }
+    
+    .profile-img,
+    .about-profile-img,
+    .hero-profile-img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        max-width: 100%;
+        max-height: 100%;
     }
 }
 
@@ -3851,26 +3975,199 @@ footer{
         padding-top: 120px;
         padding-bottom: 60px;
     }
-    .hero-content{
-        grid-template-columns: 1fr;
-        gap: 30px;
+    .hero-wrapper{
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        gap: 40px;
+        width: 100%;
     }
+    
+    /* Image comes first on mobile */
+    .profile-container{
+        width: 100%;
+        max-width: 100%;
+        overflow: visible;
+        padding: 0;
+        margin: 0 auto 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        order: -1; /* Move image to top */
+    }
+    
+    .profile-wrapper,
+    .about-profile-wrapper,
+    .hero-profile-wrapper{
+        width: 280px;
+        height: 280px;
+        max-width: min(280px, calc(100vw - 40px));
+        max-height: min(280px, calc(100vw - 40px));
+        margin: 0 auto;
+        overflow: visible;
+        position: relative;
+        display: block;
+    }
+    
+    /* Apply hexagonal tech-style animations to both index and about images on mobile */
+    .about-profile-wrapper{
+        animation: aboutFloat 6s ease-in-out infinite !important;
+        position: relative;
+    }
+    
+    /* Index page image also uses about-profile-wrapper class, so it gets the same styles */
+    .profile-wrapper.about-profile-wrapper{
+        animation: aboutFloat 6s ease-in-out infinite !important;
+    }
+    
+    .profile-img,
+    .about-profile-img,
+    .hero-profile-img{
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover;
+        max-width: 100%;
+        max-height: 100%;
+        display: block;
+    }
+    
+    /* Apply hexagonal tech-style to both index and about page images on mobile */
+    .about-profile-img,
+    .profile-img.about-profile-img{
+        border-radius: 20px !important;
+        border: 5px solid var(--neon-red) !important;
+        box-shadow: 
+            0 0 40px var(--neon-red),
+            0 0 80px rgba(0,240,255,0.4),
+            inset 0 0 20px rgba(0,240,255,0.1) !important;
+        animation: aboutGlow 5s ease-in-out infinite, aboutSlide 10s ease-in-out infinite !important;
+        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%) !important;
+        transition: all 0.3s ease !important;
+        background: transparent !important;
+        position: relative;
+        z-index: 10;
+    }
+    
+    .about-profile-img:hover,
+    .profile-img.about-profile-img:hover{
+        clip-path: polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%) !important;
+        border-color: var(--neon-pink) !important;
+    }
+    
+    /* Ensure glow effects and borders work properly on mobile - match desktop exactly */
+    /* About page glow effect */
+    .about-glow-effect{
+        position: absolute;
+        width: 110%;
+        height: 110%;
+        top: -5%;
+        left: -5%;
+        border-radius: 20px;
+        background: linear-gradient(135deg, var(--neon-red), var(--neon-pink)) !important;
+        filter: blur(60px) !important;
+        opacity: 0.3;
+        z-index: 1;
+        animation: aboutPulse 4s ease-in-out infinite !important;
+        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%) !important;
+        pointer-events: none;
+    }
+    
+    /* Default glow-effect for hero images (not about style) */
+    .glow-effect:not(.about-glow-effect){
+        position: absolute;
+        width: 110%;
+        height: 110%;
+        top: -5%;
+        left: -5%;
+        border-radius: 50%;
+        background: var(--neon-red);
+        filter: blur(60px);
+        opacity: 0.3;
+        z-index: 1;
+        animation: pulse 4s infinite alternate;
+        pointer-events: none;
+    }
+    
+    /* Hexagon border - match desktop exactly */
+    .hexagon-border{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        width: 105%;
+        height: 105%;
+        border: 4px solid var(--neon-red);
+        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+        animation: hexagonRotate 8s linear infinite, hexagonGlow 3s ease-in-out infinite !important;
+        z-index: 2;
+        pointer-events: none;
+    }
+    
+    .hexagon-border::before{
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        width: 95%;
+        height: 95%;
+        border: 2px solid var(--neon-pink);
+        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+        animation: hexagonRotateReverse 6s linear infinite !important;
+    }
+    
+    .scanning-line{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, var(--neon-red), transparent);
+        animation: scanLine 3s linear infinite !important;
+        z-index: 4;
+        pointer-events: none;
+        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+    }
+    
+    /* Content comes after image on mobile only */
+    .hero-content{
+        width: 100%;
+        order: 1; /* Content after image on mobile */
+        text-align: center;
+    }
+    
+    .hero-text{
+        width: 100%;
+        text-align: center;
+    }
+    
     .hero-text h1{
         font-size: 2.2rem;
         white-space: normal;
+        text-align: center;
     }
+    
     .hero-text h2{
         font-size: 1.3rem;
+        text-align: center;
     }
+    
+    .hero-text p{
+        text-align: center;
+    }
+    
     .btn-group{
         flex-direction: column;
         align-items: stretch;
+        justify-content: center;
     }
-    .profile-wrapper{
-        width: 260px;
-        height: 260px;
-        margin: 0 auto;
-    }
+    
     .projects-section,
     .contact-section,
     .about-section,
@@ -3893,22 +4190,53 @@ footer{
         padding: 0 30px;
         gap: 40px;
     }
-    .hero-content{
+    
+    /* Tablet: Keep original grid layout - Content left, Image right */
+    .hero-wrapper{
+        display: -ms-grid;
+        display: grid;
+        -ms-grid-columns: 1fr 1fr;
         grid-template-columns: 1fr 1fr;
         gap: 40px;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
     }
+    
+    .hero-content{
+        order: 1; /* Content on left */
+        text-align: left;
+    }
+    
+    .profile-container{
+        order: 2; /* Image on right */
+    }
+    
+    .hero-text{
+        text-align: left;
+    }
+    
     .hero-text h1{
         font-size: 2.6rem;
         white-space: normal;
+        text-align: left;
     }
+    
     .hero-text h2{
         font-size: 1.5rem;
+        text-align: left;
     }
+    
+    .hero-text p{
+        text-align: left;
+    }
+    
     .contact-content,
     .about-main{
         grid-template-columns: 1fr 1fr;
         gap: 40px;
     }
+    
     .projects-grid{
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
