@@ -394,7 +394,7 @@ footer{
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    width: 100%;
+    width: 100%; 
 }
 
 /* Desktop/Tablet: Content on left, Image on right (default grid order) */
@@ -3727,7 +3727,7 @@ footer{
     }
     
     .footer-title{
-        font-size: 0.9rem;
+    font-size: 0.9rem;
     }
     
     .footer-bio{
@@ -4444,6 +4444,60 @@ footer{
         max-width: 1200px;
         padding: 0 40px;
     }
+    
+    /* Icons Grid - Medium Desktop */
+    .skills-icons-grid {
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+        gap: 22px;
+    }
+    
+    .skill-icon-item {
+        width: 95px;
+        height: 95px;
+    }
+    
+    .skill-icon-item i {
+        font-size: 46px;
+    }
+}
+
+@media (min-width: 1366px) and (max-width: 1439px) {
+    /* Icons Grid - Large Desktop */
+    .skills-icons-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 25px;
+    }
+}
+
+@media (min-width: 1440px) {
+    /* Icons Grid - Extra Large Desktop */
+    .skills-icons-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 30px;
+        max-width: 1400px;
+    }
+    
+    .skill-icon-item {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .skill-icon-item i {
+        font-size: 52px;
+    }
+    
+    .icon-tooltip {
+        bottom: -55px;
+        padding: 10px 14px;
+    }
+    
+    .tooltip-name {
+        font-size: 13px;
+    }
+    
+    .tooltip-level {
+        font-size: 12px;
+    }
 }
 
 /* Desktop 1366px */
@@ -5039,31 +5093,128 @@ body, html{
     }
     
     /* Icons Grid - Mobile */
+    .skills-icons-view {
+        padding: 20px 0;
+        width: 100%;
+        overflow-x: visible;
+    }
+    
     .skills-icons-grid {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-        gap: 15px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+        gap: 10px;
+        padding: 0 5px;
+        max-width: 100%;
+        width: 100%;
+        margin: 0 auto;
+        overflow: visible;
     }
     
     .skill-icon-item {
-        width: 80px;
-        height: 80px;
+        width: 65px;
+        height: 65px;
+        border-radius: 12px;
+        min-width: 65px;
+        min-height: 65px;
+        flex-shrink: 0;
+    }
+    
+    .skill-icon-item:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 240, 255, 0.3);
+    }
+    
+    .skill-icon-item:active {
+        transform: translateY(-1px) scale(1.02);
     }
     
     .skill-icon-item i {
-        font-size: 36px;
+        font-size: 30px;
+        display: block;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .skill-icon-item:hover i {
+        transform: scale(1.1);
+    }
+    
+    /* Ensure Devicon icons display properly on mobile */
+    .skill-icon-item i[class*="devicon"] {
+        font-size: 30px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .icon-tooltip {
-        bottom: -55px;
+        bottom: -48px;
         padding: 6px 10px;
+        font-size: 10px;
+        max-width: 120px;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+    
+    .skill-icon-item:hover .icon-tooltip {
+        bottom: -43px;
+    }
+    
+    .icon-tooltip::before {
+        border-left-width: 5px;
+        border-right-width: 5px;
+        border-bottom-width: 5px;
+        top: -5px;
     }
     
     .tooltip-name {
-        font-size: 11px;
+        font-size: 10px;
+        margin-bottom: 1px;
+        display: block;
+        line-height: 1.2;
     }
     
     .tooltip-level {
-        font-size: 10px;
+        font-size: 9px;
+        display: block;
+    }
+    
+    /* Ensure icons container doesn't overflow */
+    .skills-icons-view .container {
+        max-width: 100%;
+        padding: 0 10px;
+        overflow-x: visible;
+    }
+    
+    /* Fix for very small screens */
+    @media (max-width: 360px) {
+        .skills-icons-grid {
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            padding: 0;
+        }
+        
+        .skill-icon-item {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+            min-height: 60px;
+        }
+        
+        .skill-icon-item i {
+            font-size: 28px;
+        }
+        
+        .skill-icon-item i[class*="devicon"] {
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+        }
     }
 }
 
@@ -5261,6 +5412,8 @@ body, html{
    ============================================ */
 .skills-icons-view {
     padding: 40px 0;
+    width: 100%;
+    overflow-x: visible;
 }
 
 .skills-icons-grid {
@@ -5269,6 +5422,9 @@ body, html{
     gap: 25px;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+    overflow: visible;
 }
 
 .skill-icon-item {
@@ -5291,6 +5447,10 @@ body, html{
     transform: translateY(-8px) scale(1.1) rotateY(5deg);
     box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
     background: rgba(0, 240, 255, 0.1);
+}
+
+.skill-icon-item:active {
+    transform: translateY(-4px) scale(1.05) rotateY(2deg);
 }
 
 .skill-icon-item i {
@@ -5410,9 +5570,15 @@ body, html{
     }
     
     /* Icons Grid - Tablet */
+    .skills-icons-view {
+        padding: 30px 0;
+    }
+    
     .skills-icons-grid {
         grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
         gap: 20px;
+        padding: 0 15px;
+        max-width: 100%;
     }
     
     .skill-icon-item {
@@ -5420,7 +5586,28 @@ body, html{
         height: 90px;
     }
     
+    .skill-icon-item:hover {
+        transform: translateY(-6px) scale(1.08) rotateY(3deg);
+    }
+    
     .skill-icon-item i {
         font-size: 42px;
+    }
+    
+    .icon-tooltip {
+        bottom: -48px;
+        padding: 7px 11px;
+    }
+    
+    .skill-icon-item:hover .icon-tooltip {
+        bottom: -43px;
+    }
+    
+    .tooltip-name {
+        font-size: 11px;
+    }
+    
+    .tooltip-level {
+        font-size: 10px;
     }
 }
