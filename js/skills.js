@@ -58,13 +58,37 @@ const SKILLS_DATA = [
 ];
 
 // Display skills by category
-function displaySkills() {
+function displaySkills(viewType = 'cards') {
     const skillsContainer = document.getElementById('skills-container');
     
     if (!skillsContainer) return;
     
     skillsContainer.innerHTML = '';
     
+    // Remove all view classes
+    skillsContainer.classList.remove('skills-cards-view', 'skills-badges-view', 'skills-icons-view');
+    skillsContainer.classList.add(`skills-${viewType}-view`);
+    
+    if (viewType === 'cards') {
+        displayCardsView(skillsContainer);
+    } 
+    // else if (viewType === 'badges') {
+    //     displayBadgesView(skillsContainer);
+    // } 
+    else if (viewType === 'icons') {
+        displayIconsView(skillsContainer);
+    }
+    
+    // Refresh AOS after content is loaded
+    if (typeof AOS !== 'undefined') {
+        setTimeout(() => {
+            AOS.refresh();
+        }, 300);
+    }
+}
+
+// Cards View (Original)
+function displayCardsView(container) {
     SKILLS_DATA.forEach((category, categoryIndex) => {
         // Create category section
         const categorySection = document.createElement('div');
@@ -134,21 +158,104 @@ function displaySkills() {
         });
         
         categorySection.appendChild(skillsGrid);
-        skillsContainer.appendChild(categorySection);
+        container.appendChild(categorySection);
+    });
+}
+
+// Badges View - Minimal tag-like badges (COMMENTED OUT)
+// function displayBadgesView(container) {
+//     SKILLS_DATA.forEach((category, categoryIndex) => {
+//         const categorySection = document.createElement('div');
+//         categorySection.className = 'skills-category-badges';
+//         categorySection.setAttribute('data-aos', 'fade-up');
+//         categorySection.setAttribute('data-aos-delay', categoryIndex * 100);
+//         
+//         const categoryTitle = document.createElement('h2');
+//         categoryTitle.className = 'skills-category-title';
+//         categoryTitle.textContent = category.category;
+//         categorySection.appendChild(categoryTitle);
+//         
+//         const badgesContainer = document.createElement('div');
+//         badgesContainer.className = 'skills-badges-container';
+//         
+//         category.skills.forEach((skill, skillIndex) => {
+//             const badge = document.createElement('div');
+//             badge.className = 'skill-badge';
+//             badge.setAttribute('data-aos', 'fade-up');
+//             badge.setAttribute('data-aos-delay', (categoryIndex * 100) + (skillIndex * 20));
+//             badge.style.setProperty('--skill-color', skill.color);
+//             
+//             badge.innerHTML = `
+//                 <i class="${skill.icon}"></i>
+//                 <span class="badge-name">${skill.name}</span>
+//                 <span class="badge-level">${skill.level}%</span>
+//             `;
+//             
+//             badgesContainer.appendChild(badge);
+//         });
+//         
+//         categorySection.appendChild(badgesContainer);
+//         container.appendChild(categorySection);
+//     });
+// }
+
+// Icons Only View - Grid of icons with tooltips
+function displayIconsView(container) {
+    const iconsGrid = document.createElement('div');
+    iconsGrid.className = 'skills-icons-grid';
+    
+    SKILLS_DATA.forEach((category) => {
+        category.skills.forEach((skill, skillIndex) => {
+            const iconItem = document.createElement('div');
+            iconItem.className = 'skill-icon-item';
+            iconItem.setAttribute('data-aos', 'zoom-in');
+            iconItem.setAttribute('data-aos-delay', skillIndex * 20);
+            iconItem.style.setProperty('--skill-color', skill.color);
+            
+            iconItem.innerHTML = `
+                <i class="${skill.icon}"></i>
+                <div class="icon-tooltip">
+                    <span class="tooltip-name">${skill.name}</span>
+                    <span class="tooltip-level">${skill.level}%</span>
+                </div>
+            `;
+            
+            iconsGrid.appendChild(iconItem);
+        });
     });
     
-    // Refresh AOS after content is loaded
-    if (typeof AOS !== 'undefined') {
-        setTimeout(() => {
-            AOS.refresh();
-        }, 300);
-    }
+    container.appendChild(iconsGrid);
+}
+
+// View Toggle Handler
+function initViewToggle() {
+    const toggleButtons = document.querySelectorAll('.view-toggle-btn');
+    
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Remove active class from all buttons
+            toggleButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            // Get view type
+            const viewType = this.getAttribute('data-view');
+            
+            // Display skills with selected view
+            displaySkills(viewType);
+        });
+    });
 }
 
 // Initialize skills display when DOM is ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', displaySkills);
+    document.addEventListener('DOMContentLoaded', function() {
+        displaySkills('cards');
+        initViewToggle();
+    });
 } else {
-    displaySkills();
+    displaySkills('cards');
+    initViewToggle();
 }
 
