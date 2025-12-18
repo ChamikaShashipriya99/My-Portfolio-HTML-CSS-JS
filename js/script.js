@@ -54,16 +54,45 @@ document.addEventListener('DOMContentLoaded', function(){
     
     // Initialize AOS (Animate On Scroll)
     if (typeof AOS !== 'undefined') {
+        // Check if mobile
+        const isMobile = window.innerWidth <= 767;
+        
         AOS.init({
             duration: 1000,
             easing: 'ease-in-out',
             once: true,
             offset: 100,
-            disable: function() {
-                // Disable AOS on mobile devices (width <= 767px)
-                return window.innerWidth <= 767;
-            }
+            disable: false, // Keep AOS enabled but ensure mobile visibility
+            useClassNames: false,
+            initClassName: false,
+            animatedClassName: 'aos-animate',
         });
+        
+        // On mobile, ensure all AOS elements are visible immediately
+        if (isMobile) {
+            // Force visibility of all elements with AOS attributes
+            const forceVisibility = () => {
+                document.querySelectorAll('[data-aos]').forEach(el => {
+                    el.style.opacity = '1';
+                    el.style.visibility = 'visible';
+                    el.style.transform = 'none';
+                    el.classList.add('aos-animate');
+                });
+            };
+            
+            // Run immediately and after a short delay to catch dynamically loaded content
+            forceVisibility();
+            setTimeout(forceVisibility, 100);
+            setTimeout(forceVisibility, 500);
+            setTimeout(forceVisibility, 1000);
+            
+            // Also run when window is resized
+            window.addEventListener('resize', function() {
+                if (window.innerWidth <= 767) {
+                    forceVisibility();
+                }
+            });
+        }
     }
     
     const profileWrapper = document.querySelector('.profile-wrapper');

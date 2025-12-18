@@ -229,6 +229,25 @@ function displayExperience() {
     if (typeof AOS !== 'undefined') {
         AOS.refresh();
     }
+    
+    // Ensure visibility on mobile devices
+    const isMobile = window.innerWidth <= 767;
+    if (isMobile) {
+        setTimeout(() => {
+            document.querySelectorAll('.experience-item').forEach(item => {
+                item.style.opacity = '1';
+                item.style.visibility = 'visible';
+                item.style.display = 'flex';
+                
+                const content = item.querySelector('.experience-content');
+                if (content) {
+                    content.style.opacity = '1';
+                    content.style.visibility = 'visible';
+                    content.style.display = 'block';
+                }
+            });
+        }, 100);
+    }
 }
 
 // Calculate duration between two dates

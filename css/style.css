@@ -1337,8 +1337,9 @@ p{
 
 /*Projects Grid*/
 .projects-grid{
+    display: -ms-grid;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
     margin-top: 0;
     clear: both;
@@ -1617,12 +1618,30 @@ p{
 /* Projects Section - Mobile (0px - 767px) */
 @media (max-width: 767px){
     .projects-grid{
+        display: -ms-grid;
+        display: grid;
+        -ms-grid-columns: 1fr;
         grid-template-columns: 1fr;
+        gap: 25px;
+        width: 100%;
+    }
+    
+    .project-card{
+        width: 100%;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        opacity: 1 !important;
+        visibility: visible !important;
+        -webkit-transform: none !important;
+        -moz-transform: none !important;
+        transform: none !important;
     }
     
     .filter-container{
         gap: 10px;
         justify-content: center;
+        flex-wrap: wrap;
     }
     
     .filter-btn{
@@ -1647,6 +1666,17 @@ p{
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
+    }
+    
+    /* Ensure loading and error states are visible */
+    .loading-state,
+    .error-state,
+    .no-projects{
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 }
 
@@ -2614,6 +2644,11 @@ p{
 
 /* Experience Section - Mobile (0px - 767px) */
 @media (max-width: 767px){
+    .experience-timeline{
+        width: 100%;
+        padding: 40px 0;
+    }
+    
     .experience-timeline::before{
         left: 20px;
     }
@@ -2629,6 +2664,16 @@ p{
     
     .experience-item{
         padding-left: 60px;
+        width: 100%;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        opacity: 1 !important;
+        visibility: visible !important;
+        -webkit-transform: none !important;
+        -moz-transform: none !important;
+        transform: none !important;
+        margin-bottom: 40px;
     }
     
     .experience-icon{
@@ -2642,6 +2687,10 @@ p{
     
     .experience-content{
         padding: 15px;
+        width: 100%;
+        display: block;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
     
     .company-logo{
@@ -2681,6 +2730,15 @@ p{
     .tech-tag{
         font-size: 0.8rem;
         padding: 6px 12px;
+    }
+    
+    /* Ensure no experience message is visible */
+    .no-experience{
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 }
 
@@ -3661,6 +3719,30 @@ body, html{
     overflow-x: hidden;
     width: 100%;
     max-width: 100%;
+}
+
+/* Ensure AOS elements are visible on mobile */
+@media (max-width: 767px){
+    [data-aos]{
+        opacity: 1 !important;
+        visibility: visible !important;
+        -webkit-transform: none !important;
+        -moz-transform: none !important;
+        transform: none !important;
+    }
+    
+    [data-aos].aos-animate{
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    /* Override any AOS hiding on mobile */
+    .project-card[data-aos],
+    .experience-item[data-aos]{
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: flex !important;
+    }
 }
 
 /* Fix for iOS Safari viewport */
