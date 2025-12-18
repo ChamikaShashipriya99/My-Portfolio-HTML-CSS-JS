@@ -167,18 +167,6 @@ function filterProjects(language) {
     }
 
     displayProjects(filteredProjects);
-    
-    // Ensure visibility on mobile after filtering
-    const isMobile = window.innerWidth <= 767;
-    if (isMobile) {
-        setTimeout(() => {
-            document.querySelectorAll('.project-card').forEach(card => {
-                card.style.opacity = '1';
-                card.style.visibility = 'visible';
-                card.style.display = 'flex';
-            });
-        }, 100);
-    }
 }
 
 // Display projects in grid
@@ -258,18 +246,8 @@ function displayProjects(projects) {
     
     // Refresh AOS after dynamically adding content
     if (typeof AOS !== 'undefined') {
-        AOS.refresh();
-    }
-    
-    // Ensure visibility on mobile devices
-    const isMobile = window.innerWidth <= 767;
-    if (isMobile) {
         setTimeout(() => {
-            document.querySelectorAll('.project-card').forEach(card => {
-                card.style.opacity = '1';
-                card.style.visibility = 'visible';
-                card.style.display = 'flex';
-            });
+            AOS.refresh();
         }, 100);
     }
 }

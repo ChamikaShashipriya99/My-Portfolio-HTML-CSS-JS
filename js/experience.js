@@ -227,25 +227,8 @@ function displayExperience() {
     
     // Refresh AOS after dynamically adding content
     if (typeof AOS !== 'undefined') {
-        AOS.refresh();
-    }
-    
-    // Ensure visibility on mobile devices
-    const isMobile = window.innerWidth <= 767;
-    if (isMobile) {
         setTimeout(() => {
-            document.querySelectorAll('.experience-item').forEach(item => {
-                item.style.opacity = '1';
-                item.style.visibility = 'visible';
-                item.style.display = 'flex';
-                
-                const content = item.querySelector('.experience-content');
-                if (content) {
-                    content.style.opacity = '1';
-                    content.style.visibility = 'visible';
-                    content.style.display = 'block';
-                }
-            });
+            AOS.refresh();
         }, 100);
     }
 }

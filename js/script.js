@@ -52,47 +52,30 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     }
     
-    // Initialize AOS (Animate On Scroll)
+    // Initialize AOS (Animate On Scroll) - Enabled on all devices including mobile
     if (typeof AOS !== 'undefined') {
-        // Check if mobile
-        const isMobile = window.innerWidth <= 767;
-        
         AOS.init({
-            duration: 1000,
-            easing: 'ease-in-out',
+            duration: 800,
+            easing: 'ease-out-cubic',
             once: true,
-            offset: 100,
-            disable: false, // Keep AOS enabled but ensure mobile visibility
-            useClassNames: false,
-            initClassName: false,
+            offset: 50,
+            delay: 0,
+            disable: false, // Enable AOS on all devices
+            startEvent: 'DOMContentLoaded',
+            initClassName: 'aos-init',
             animatedClassName: 'aos-animate',
+            useClassNames: false,
+            disableMutationObserver: false,
+            debounceDelay: 50,
+            throttleDelay: 99,
         });
         
-        // On mobile, ensure all AOS elements are visible immediately
-        if (isMobile) {
-            // Force visibility of all elements with AOS attributes
-            const forceVisibility = () => {
-                document.querySelectorAll('[data-aos]').forEach(el => {
-                    el.style.opacity = '1';
-                    el.style.visibility = 'visible';
-                    el.style.transform = 'none';
-                    el.classList.add('aos-animate');
-                });
-            };
-            
-            // Run immediately and after a short delay to catch dynamically loaded content
-            forceVisibility();
-            setTimeout(forceVisibility, 100);
-            setTimeout(forceVisibility, 500);
-            setTimeout(forceVisibility, 1000);
-            
-            // Also run when window is resized
-            window.addEventListener('resize', function() {
-                if (window.innerWidth <= 767) {
-                    forceVisibility();
-                }
-            });
-        }
+        // Refresh AOS after dynamically loaded content
+        setTimeout(() => {
+            if (typeof AOS !== 'undefined') {
+                AOS.refresh();
+            }
+        }, 500);
     }
     
     const profileWrapper = document.querySelector('.profile-wrapper');

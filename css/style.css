@@ -1631,11 +1631,6 @@ p{
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        opacity: 1 !important;
-        visibility: visible !important;
-        -webkit-transform: none !important;
-        -moz-transform: none !important;
-        transform: none !important;
     }
     
     .filter-container{
@@ -2753,11 +2748,6 @@ p{
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
-        opacity: 1 !important;
-        visibility: visible !important;
-        -webkit-transform: none !important;
-        -moz-transform: none !important;
-        transform: none !important;
         margin-bottom: 35px;
     }
     
@@ -2777,8 +2767,6 @@ p{
         padding-top: 50px;
         width: 100%;
         display: block;
-        opacity: 1 !important;
-        visibility: visible !important;
         min-width: 0;
         position: relative;
     }
@@ -4033,27 +4021,12 @@ body, html{
     max-width: 100%;
 }
 
-/* Ensure AOS elements are visible on mobile */
+/* AOS animations enabled on mobile */
 @media (max-width: 767px){
-    [data-aos]{
-        opacity: 1 !important;
-        visibility: visible !important;
-        -webkit-transform: none !important;
-        -moz-transform: none !important;
-        transform: none !important;
-    }
-    
+    /* Allow AOS to animate on mobile, but ensure elements are visible after animation */
     [data-aos].aos-animate{
         opacity: 1 !important;
         visibility: visible !important;
-    }
-    
-    /* Override any AOS hiding on mobile */
-    .project-card[data-aos],
-    .experience-item[data-aos]{
-        opacity: 1 !important;
-        visibility: visible !important;
-        display: flex !important;
     }
 }
 
