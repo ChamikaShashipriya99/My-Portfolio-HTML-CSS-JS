@@ -2407,6 +2407,9 @@ p{
 
 .experience-header-card{
     margin-bottom: 20px;
+    position: relative;
+    padding-right: 130px;
+    min-height: 120px;
 }
 
 .experience-title-section{
@@ -2580,6 +2583,10 @@ p{
 
 /* Experience Section - Tablet (768px - 1199px) */
 @media (min-width: 768px) and (max-width: 1199px){
+    .experience-timeline{
+        padding: 50px 0;
+    }
+    
     .experience-timeline::before{
         left: 30px;
     }
@@ -2590,11 +2597,13 @@ p{
     }
     
     .section-header-title{
-        font-size: 1.6rem;
+        font-size: 1.5rem;
+        line-height: 1.4;
     }
     
     .experience-item{
         padding-left: 80px;
+        margin-bottom: 45px;
     }
     
     .experience-icon{
@@ -2604,35 +2613,110 @@ p{
     }
     
     .experience-icon i{
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
     
     .experience-content{
-        padding: 20px;
+        padding: 22px;
     }
     
-    .company-logo{
-        width: 80px;
-        height: 80px;
-        top: 15px;
-        right: 15px;
-        padding: 6px;
+    .experience-header-card{
+        margin-bottom: 18px;
+        padding-right: 85px;
+        min-height: 80px;
+        position: relative;
     }
     
     .experience-title{
-        font-size: 1.3rem;
+        font-size: 1.35rem;
+        line-height: 1.4;
     }
     
     .experience-title-section{
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .experience-type{
+        font-size: 0.8rem;
+        padding: 6px 13px;
+    }
+    
+    .experience-company,
+    .experience-location{
+        font-size: 0.95rem;
+        margin-bottom: 7px;
+    }
+    
+    .experience-company i,
+    .experience-location i{
+        font-size: 0.85rem;
     }
     
     .experience-dates{
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+        margin-bottom: 18px;
+        padding-bottom: 18px;
+    }
+    
+    .date-range,
+    .duration{
+        font-size: 0.9rem;
+    }
+    
+    .date-range i,
+    .duration i{
+        font-size: 0.85rem;
+    }
+    
+    .experience-description{
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 22px;
+    }
+    
+    .experience-responsibilities,
+    .experience-technologies{
+        margin-bottom: 22px;
+    }
+    
+    .responsibilities-title,
+    .technologies-title{
+        font-size: 1.05rem;
+        margin-bottom: 14px;
+    }
+    
+    .responsibilities-title i,
+    .technologies-title i{
+        font-size: 0.95rem;
+    }
+    
+    .responsibilities-list li{
+        font-size: 0.9rem;
+        line-height: 1.7;
+        margin-bottom: 9px;
+        padding-left: 23px;
+    }
+    
+    .tech-tags{
+        gap: 9px;
+    }
+    
+    .tech-tag{
+        font-size: 0.8rem;
+        padding: 7px 14px;
+    }
+    
+    .company-logo{
+        width: 75px;
+        height: 75px;
+        top: 12px;
+        right: 12px;
+        padding: 5px;
     }
     
     .experience-item:hover .experience-content{
@@ -2646,7 +2730,7 @@ p{
 @media (max-width: 767px){
     .experience-timeline{
         width: 100%;
-        padding: 40px 0;
+        padding: 30px 0;
     }
     
     .experience-timeline::before{
@@ -2659,7 +2743,8 @@ p{
     }
     
     .section-header-title{
-        font-size: 1.4rem;
+        font-size: 1.3rem;
+        line-height: 1.4;
     }
     
     .experience-item{
@@ -2673,63 +2758,191 @@ p{
         -webkit-transform: none !important;
         -moz-transform: none !important;
         transform: none !important;
-        margin-bottom: 40px;
+        margin-bottom: 35px;
     }
     
     .experience-icon{
         width: 40px;
         height: 40px;
+        left: 0;
+        flex-shrink: 0;
     }
     
     .experience-icon i{
-        font-size: 1.2rem;
+        font-size: 1.1rem;
     }
     
     .experience-content{
-        padding: 15px;
+        padding: 15px 12px;
+        padding-top: 50px;
         width: 100%;
         display: block;
         opacity: 1 !important;
         visibility: visible !important;
+        min-width: 0;
+        position: relative;
     }
     
-    .company-logo{
-        width: 70px;
-        height: 70px;
-        top: 10px;
-        right: 10px;
-        padding: 5px;
+    .experience-header-card{
+        margin-bottom: 15px;
+        padding-top: 0;
+        padding-right: 65px;
+        min-height: 50px;
+        position: relative;
     }
     
     .experience-title{
-        font-size: 1.1rem;
+        font-size: 1.05rem;
+        line-height: 1.4;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        padding-right: 0;
+        margin-right: 0;
     }
     
     .experience-title-section{
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
+        gap: 8px;
+        margin-bottom: 12px;
+        width: 100%;
+        padding-right: 0;
+    }
+    
+    .experience-type{
+        font-size: 0.75rem;
+        padding: 5px 12px;
+        align-self: flex-start;
+    }
+    
+    .experience-company,
+    .experience-location{
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    
+    .experience-company i,
+    .experience-location i{
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+    
+    .experience-company span,
+    .experience-location span{
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     
     .experience-dates{
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
+        gap: 8px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
     }
     
-    .experience-item:hover .experience-content{
-        -webkit-transform: translateX(5px);
-        -moz-transform: translateX(5px);
-        transform: translateX(5px);
+    .date-range,
+    .duration{
+        font-size: 0.85rem;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    
+    .date-range i,
+    .duration i{
+        font-size: 0.8rem;
+        flex-shrink: 0;
+    }
+    
+    .date-range span,
+    .duration span{
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .experience-description{
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 18px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .experience-responsibilities,
+    .experience-technologies{
+        margin-bottom: 18px;
+    }
+    
+    .responsibilities-title,
+    .technologies-title{
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+        gap: 8px;
+    }
+    
+    .responsibilities-title i,
+    .technologies-title i{
+        font-size: 0.9rem;
+        flex-shrink: 0;
     }
     
     .responsibilities-list li{
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin-bottom: 8px;
+        padding-left: 20px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .responsibilities-list li::before{
+        left: 2px;
         font-size: 0.9rem;
     }
     
+    .tech-tags{
+        gap: 8px;
+    }
+    
     .tech-tag{
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         padding: 6px 12px;
+        white-space: nowrap;
+    }
+    
+    .company-logo{
+        width: 50px;
+        height: 50px;
+        max-width: 20%;
+        max-height: 20%;
+        top: 10px;
+        right: 12px;
+        padding: 4px;
+        z-index: 2;
+        position: absolute;
+        flex-shrink: 0;
+    }
+    
+    /* Prevent logo from overlapping title */
+    .experience-title-section{
+        max-width: calc(100% - 70px);
+        padding-right: 0;
+        margin-right: 0;
+    }
+    
+    .experience-title{
+        max-width: 100%;
+        padding-right: 0;
+        margin-right: 0;
+    }
+    
+    
+    .experience-item:hover .experience-content{
+        -webkit-transform: translateX(3px);
+        -moz-transform: translateX(3px);
+        transform: translateX(3px);
     }
     
     /* Ensure no experience message is visible */
@@ -2739,6 +2952,105 @@ p{
         display: flex !important;
         opacity: 1 !important;
         visibility: visible !important;
+        padding: 40px 20px;
+        text-align: center;
+    }
+    
+    .no-experience i{
+        font-size: 3rem;
+    }
+    
+    .no-experience p{
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    
+    /* Additional small screen adjustments (below 480px) */
+    @media (max-width: 480px){
+        .experience-item{
+            padding-left: 55px;
+            margin-bottom: 30px;
+        }
+        
+        .experience-section-header{
+            padding-left: 55px;
+            margin-bottom: 20px;
+        }
+        
+        .experience-timeline::before{
+            left: 18px;
+        }
+        
+        .experience-icon{
+            width: 36px;
+            height: 36px;
+        }
+        
+        .experience-icon i{
+            font-size: 1rem;
+        }
+        
+        .experience-content{
+            padding: 12px 10px;
+        }
+        
+        .experience-title{
+            font-size: 1rem;
+        }
+        
+        .section-header-title{
+            font-size: 1.2rem;
+        }
+        
+        .experience-content{
+            padding-top: 45px;
+        }
+        
+        .experience-header-card{
+            padding-right: 55px;
+            min-height: 45px;
+        }
+        
+        .experience-title-section{
+            max-width: calc(100% - 60px);
+        }
+        
+        .company-logo{
+            width: 45px;
+            height: 45px;
+            max-width: 18%;
+            max-height: 18%;
+            top: 8px;
+            right: 10px;
+            padding: 3px;
+            z-index: 2;
+            position: absolute;
+            flex-shrink: 0;
+        }
+        
+        .experience-company,
+        .experience-location{
+            font-size: 0.85rem;
+        }
+        
+        .experience-description{
+            font-size: 0.85rem;
+        }
+        
+        .responsibilities-title,
+        .technologies-title{
+            font-size: 0.9rem;
+        }
+        
+        .responsibilities-list li{
+            font-size: 0.8rem;
+            padding-left: 18px;
+        }
+        
+        .tech-tag{
+            font-size: 0.7rem;
+            padding: 5px 10px;
+        }
     }
 }
 
