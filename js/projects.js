@@ -72,9 +72,18 @@ async function fetchProjects() {
     const projectsGrid = document.getElementById('projects-grid');
 
     try {
-        loadingEl.style.display = 'flex';
-        errorEl.style.display = 'none';
-        projectsGrid.innerHTML = '';
+        // Show loading, hide error and grid
+        if (loadingEl) {
+            loadingEl.style.display = 'flex';
+            loadingEl.style.setProperty('display', 'flex', 'important');
+        }
+        if (errorEl) {
+            errorEl.style.display = 'none';
+            errorEl.style.setProperty('display', 'none', 'important');
+        }
+        if (projectsGrid) {
+            projectsGrid.innerHTML = '';
+        }
 
         const response = await fetch(GITHUB_API_URL);
         
@@ -88,7 +97,9 @@ async function fetchProjects() {
         // allProjects = repos.filter(repo => !repo.fork);
         
         // Fetch README for each repository
-        loadingEl.querySelector('p').textContent = 'Loading projects and descriptions...';
+        if (loadingEl && loadingEl.querySelector('p')) {
+            loadingEl.querySelector('p').textContent = 'Loading projects and descriptions...';
+        }
         
         allProjects = await Promise.all(repos.map(async (repo) => {
             const readmeDescription = await fetchReadme(repo.owner.login, repo.name);
@@ -98,10 +109,20 @@ async function fetchProjects() {
             };
         }));
 
-        loadingEl.style.display = 'none';
+        // Hide loading after projects are loaded
+        if (loadingEl) {
+            loadingEl.style.display = 'none';
+            loadingEl.style.setProperty('display', 'none', 'important');
+        }
+        if (errorEl) {
+            errorEl.style.display = 'none';
+            errorEl.style.setProperty('display', 'none', 'important');
+        }
         
         if (allProjects.length === 0) {
-            projectsGrid.innerHTML = '<div class="no-projects"><i class="fa-solid fa-folder-open"></i><p>No projects found</p></div>';
+            if (projectsGrid) {
+                projectsGrid.innerHTML = '<div class="no-projects"><i class="fa-solid fa-folder-open"></i><p>No projects found</p></div>';
+            }
             return;
         }
 
@@ -113,9 +134,18 @@ async function fetchProjects() {
 
     } catch (error) {
         console.error('Error fetching projects:', error);
-        loadingEl.style.display = 'none';
-        errorEl.style.display = 'flex';
-        projectsGrid.innerHTML = '';
+        // Hide loading, show error
+        if (loadingEl) {
+            loadingEl.style.display = 'none';
+            loadingEl.style.setProperty('display', 'none', 'important');
+        }
+        if (errorEl) {
+            errorEl.style.display = 'flex';
+            errorEl.style.setProperty('display', 'flex', 'important');
+        }
+        if (projectsGrid) {
+            projectsGrid.innerHTML = '';
+        }
     }
 }
 
@@ -261,13 +291,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Check if GitHub username is set
+    const loadingEl = document.getElementById('loading');
+    const errorEl = document.getElementById('error');
+    
     if (GITHUB_USERNAME === 'YOUR_GITHUB_USERNAME') {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('error').style.display = 'flex';
-        document.getElementById('error').innerHTML = `
-            <i class="fa-solid fa-exclamation-triangle"></i>
-            <p>Please update the GITHUB_USERNAME in projects.js with your GitHub username</p>
-        `;
+        if (loadingEl) {
+            loadingEl.style.display = 'none';
+        }
+        if (errorEl) {
+            errorEl.style.display = 'flex';
+            errorEl.innerHTML = `
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                <p>Please update the GITHUB_USERNAME in projects.js with your GitHub username</p>
+            `;
+        }
     } else {
         fetchProjects();
     }
