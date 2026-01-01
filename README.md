@@ -315,6 +315,6 @@ This project is open source and available for personal use. Feel free to customi
 
 ---
 
-**Made with ❤️ using HTML, CSS & JavaScript**
+**Made with ❤️❤️❤️ using HTML, CSS & JavaScript**
 
 If you found this portfolio helpful, feel free to star the repository! ⭐
