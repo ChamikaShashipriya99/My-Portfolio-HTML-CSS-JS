@@ -58,7 +58,7 @@ const SKILLS_DATA = [
 ];
 
 // Display skills by category
-function displaySkills(viewType = 'cards') {
+function displaySkills(viewType = 'icons') {
     const skillsContainer = document.getElementById('skills-container');
     
     if (!skillsContainer) return;
@@ -199,32 +199,74 @@ function displayCardsView(container) {
 //     });
 // }
 
-// Icons Only View - Grid of icons with tooltips
+// Icons Only View - Horizontal scrolling marquee grouped by categories
 function displayIconsView(container) {
-    const iconsGrid = document.createElement('div');
-    iconsGrid.className = 'skills-icons-grid';
+    // Create wrapper for all category marquees
+    const marqueeWrapper = document.createElement('div');
+    marqueeWrapper.className = 'skills-marquee-wrapper';
     
-    SKILLS_DATA.forEach((category) => {
-        category.skills.forEach((skill, skillIndex) => {
-            const iconItem = document.createElement('div');
-            iconItem.className = 'skill-icon-item';
-            iconItem.setAttribute('data-aos', 'zoom-in');
-            iconItem.setAttribute('data-aos-delay', skillIndex * 20);
-            iconItem.style.setProperty('--skill-color', skill.color);
-            
-            iconItem.innerHTML = `
-                <i class="${skill.icon}"></i>
-                <div class="icon-tooltip">
-                    <span class="tooltip-name">${skill.name}</span>
-                    <span class="tooltip-level">${skill.level}%</span>
-                </div>
-            `;
-            
-            iconsGrid.appendChild(iconItem);
+    SKILLS_DATA.forEach((category, categoryIndex) => {
+        // Create category section
+        const categorySection = document.createElement('div');
+        categorySection.className = 'skills-category-marquee';
+        
+        // Category title
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.className = 'skills-category-title-marquee';
+        categoryTitle.textContent = category.category;
+        categorySection.appendChild(categoryTitle);
+        
+        // Create marquee container
+        const marqueeContainer = document.createElement('div');
+        marqueeContainer.className = 'skills-marquee-container';
+        
+        // Create wrapper for tracks (to keep them in one line)
+        const tracksWrapper = document.createElement('div');
+        tracksWrapper.className = 'skills-marquee-tracks-wrapper';
+        tracksWrapper.setAttribute('data-speed', 'slow');
+        
+        // Create first track (for seamless loop)
+        const track1 = document.createElement('div');
+        track1.className = 'skills-marquee-track';
+        
+        // Create second track (duplicate for seamless loop)
+        const track2 = document.createElement('div');
+        track2.className = 'skills-marquee-track';
+        
+        // Add icons to both tracks (duplicate for seamless infinite loop)
+        category.skills.forEach((skill) => {
+            const iconItem1 = createIconItem(skill);
+            const iconItem2 = createIconItem(skill);
+            track1.appendChild(iconItem1);
+            track2.appendChild(iconItem2);
         });
+        
+        // Append both tracks to wrapper (they'll be side by side)
+        tracksWrapper.appendChild(track1);
+        tracksWrapper.appendChild(track2);
+        marqueeContainer.appendChild(tracksWrapper);
+        categorySection.appendChild(marqueeContainer);
+        marqueeWrapper.appendChild(categorySection);
     });
     
-    container.appendChild(iconsGrid);
+    container.appendChild(marqueeWrapper);
+}
+
+// Helper function to create icon item
+function createIconItem(skill) {
+    const iconItem = document.createElement('div');
+    iconItem.className = 'skill-icon-item-marquee';
+    iconItem.style.setProperty('--skill-color', skill.color);
+    
+    iconItem.innerHTML = `
+        <i class="${skill.icon}"></i>
+        <div class="icon-tooltip-marquee">
+            <span class="tooltip-name">${skill.name}</span>
+            <span class="tooltip-level">${skill.level}%</span>
+        </div>
+    `;
+    
+    return iconItem;
 }
 
 // View Toggle Handler
@@ -251,11 +293,11 @@ function initViewToggle() {
 // Initialize skills display when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
-        displaySkills('cards');
+        displaySkills('icons');
         initViewToggle();
     });
 } else {
-    displaySkills('cards');
+    displaySkills('icons');
     initViewToggle();
 }
 

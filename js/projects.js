@@ -85,10 +85,22 @@ async function fetchProjects() {
             projectsGrid.innerHTML = '';
         }
 
+        console.log('Fetching from:', GITHUB_API_URL);
         const response = await fetch(GITHUB_API_URL);
         
+        console.log('Response status:', response.status, response.statusText);
+        
         if (!response.ok) {
-            throw new Error('Failed to fetch repositories');
+            if (response.status === 404) {
+                throw new Error(`GitHub user "${GITHUB_USERNAME}" not found. Please verify the username is correct.`);
+            } else if (response.status === 403) {
+                const rateLimitReset = response.headers.get('X-RateLimit-Reset');
+                throw new Error('GitHub API rate limit exceeded. Please try again later.');
+            } else {
+                const errorText = await response.text().catch(() => '');
+                console.error('GitHub API Error:', response.status, errorText);
+                throw new Error(`Failed to fetch repositories (${response.status}): ${response.statusText}. Please check your internet connection and try again.`);
+            }
         }
 
         const repos = await response.json();
@@ -142,6 +154,11 @@ async function fetchProjects() {
         if (errorEl) {
             errorEl.style.display = 'flex';
             errorEl.style.setProperty('display', 'flex', 'important');
+            // Update error message with more details
+            const errorMessage = errorEl.querySelector('p');
+            if (errorMessage) {
+                errorMessage.textContent = error.message || 'Failed to load projects. Please check your GitHub username and try again.';
+            }
         }
         if (projectsGrid) {
             projectsGrid.innerHTML = '';
@@ -294,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingEl = document.getElementById('loading');
     const errorEl = document.getElementById('error');
     
-    if (GITHUB_USERNAME === 'YOUR_GITHUB_USERNAME') {
+    if (GITHUB_USERNAME === 'YOUR_GITHUB_USERNAME' || !GITHUB_USERNAME) {
         if (loadingEl) {
             loadingEl.style.display = 'none';
         }
@@ -306,6 +323,8 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
     } else {
+        console.log('Fetching projects for GitHub user:', GITHUB_USERNAME);
+        console.log('API URL:', GITHUB_API_URL);
         fetchProjects();
     }
 });
