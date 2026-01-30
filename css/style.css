@@ -2102,28 +2102,21 @@ p{
     margin-top: 20px;
 }
 
-/*Experience Timeline*/
+/*Experience Cards*/
 .experience-timeline{
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     position: relative;
     padding: 40px 0;
-}
-
-.experience-timeline::before{
-    content: '';
-    position: absolute;
-    left: 50px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(180deg, var(--neon-red), var(--neon-pink));
-    opacity: 0.3;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
 }
 
 .experience-section-header{
     margin-bottom: 40px;
-    padding-left: 120px;
+    padding-left: 0;
+    grid-column: 1 / -1;
 }
 
 .section-header-title{
@@ -2149,10 +2142,11 @@ p{
 
 .experience-item{
     position: relative;
-    margin-bottom: 50px;
-    padding-left: 120px;
+    margin-bottom: 0;
+    padding-left: 0;
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .experience-item:last-child{
@@ -2160,55 +2154,46 @@ p{
 }
 
 .experience-icon{
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100px;
-    height: 100px;
+    position: relative;
+    width: 100%;
+    height: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 240, 255, 0.1);
-    border: 3px solid var(--neon-red);
-    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(0, 240, 255, 0.05));
+    border-bottom: 2px solid rgba(0, 240, 255, 0.2);
+    border-radius: 15px 15px 0 0;
     z-index: 2;
     transition: var(--transition);
 }
 
 /* Varied icon styles for different cards */
 .experience-item[data-index="0"] .experience-icon{
-    border-width: 4px;
-    box-shadow: 0 0 20px rgba(0,240,255,0.3);
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(0, 240, 255, 0.08));
 }
 
 .experience-item[data-index="1"] .experience-icon{
-    border-radius: 20px;
-    border-style: dashed;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(0, 240, 255, 0.06));
 }
 
 .experience-item[data-index="2"] .experience-icon{
-    border-radius: 25% 0;
-    transform: rotate(45deg);
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(0, 240, 255, 0.05));
 }
 
 .experience-item[data-index="2"] .experience-icon i{
-    transform: rotate(-45deg);
+    transform: none;
 }
 
 .experience-item[data-index="3"] .experience-icon{
-    border: none;
-    background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 240, 255, 0.1));
-    box-shadow: inset 0 0 20px rgba(0,240,255,0.2);
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(0, 240, 255, 0.06));
 }
 
 .experience-item[data-index="4"] .experience-icon{
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    animation: iconMorph 8s ease-in-out infinite;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(0, 240, 255, 0.08));
 }
 
 .experience-item[data-index="5"] .experience-icon{
-    border: 3px solid var(--neon-pink);
-    background: rgba(0, 240, 255, 0.05);
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(0, 240, 255, 0.05));
 }
 
 @keyframes iconMorph {
@@ -2221,70 +2206,60 @@ p{
 }
 
 .experience-icon i{
-    font-size: 2rem;
+    font-size: 3rem;
     color: var(--neon-red);
     transition: var(--transition);
 }
 
 .experience-item:hover .experience-icon{
-    background: var(--neon-red);
-    transform: scale(1.1);
-    box-shadow: 0 0 30px rgba(0,240,255,0.5);
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(0, 240, 255, 0.15));
+    box-shadow: 0 0 30px rgba(0,240,255,0.3);
 }
 
 .experience-item:hover .experience-icon i{
-    color: #000;
+    color: var(--neon-red);
+    transform: scale(1.1);
 }
 
 .experience-content{
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(0, 240, 255, 0.1);
-    border-radius: 15px;
+    border-radius: 0 0 15px 15px;
     padding: 30px;
     width: 100%;
     transition: var(--transition);
     position: relative;
     overflow: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Varied Experience Card Styles */
 .experience-item[data-index="0"] .experience-content{
     background: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
-    border: 2px solid rgba(0, 240, 255, 0.3);
+    border: 1px solid rgba(0, 240, 255, 0.3);
     box-shadow: 0 4px 20px rgba(0, 240, 255, 0.1);
 }
 
 .experience-item[data-index="0"] .experience-content::before{
-    height: 6px;
-    background: linear-gradient(90deg, var(--neon-red), var(--neon-pink), var(--neon-red));
-    background-size: 200% 100%;
-    animation: shimmer 3s linear infinite;
+    display: none;
 }
 
 .experience-item[data-index="1"] .experience-content{
     background: rgba(255, 255, 255, 0.03);
-    border-left: 4px solid var(--neon-red);
-    border-radius: 0 15px 15px 0;
-    box-shadow: -4px 4px 20px rgba(0, 240, 255, 0.15);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 240, 255, 0.15);
 }
 
 .experience-item[data-index="1"] .experience-content::after{
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
-    border-radius: 0 15px 0 100%;
-    pointer-events: none;
+    display: none;
 }
 
 .experience-item[data-index="2"] .experience-content{
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(0, 240, 255, 0.2);
-    border-top: 3px solid var(--neon-pink);
-    box-shadow: 0 -4px 20px rgba(0, 240, 255, 0.1), inset 0 2px 10px rgba(0, 240, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 240, 255, 0.1);
 }
 
 .experience-item[data-index="2"] .experience-content::before{
@@ -2292,58 +2267,34 @@ p{
 }
 
 .experience-item[data-index="2"] .experience-content::after{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
-    animation: pulse 2s ease-in-out infinite;
+    display: none;
 }
 
 .experience-item[data-index="3"] .experience-content{
     background: rgba(255, 255, 255, 0.025);
-    border: 2px dashed rgba(0, 240, 255, 0.25);
-    border-radius: 20px;
-    position: relative;
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    border-radius: 0 0 15px 15px;
 }
 
 .experience-item[data-index="3"] .experience-content::before{
-    height: 100%;
-    width: 4px;
-    background: linear-gradient(180deg, var(--neon-red), var(--neon-pink));
-    transform: scaleY(0);
-    transform-origin: top;
-    left: 0;
-    border-radius: 20px 0 0 20px;
-}
-
-.experience-item[data-index="3"]:hover .experience-content::before{
-    transform: scaleY(1);
+    display: none;
 }
 
 .experience-item[data-index="4"] .experience-content{
     background: rgba(0, 240, 255, 0.05);
     border: 1px solid rgba(0, 240, 255, 0.15);
-    border-radius: 10px 25px 10px 25px;
-    box-shadow: 
-        0 4px 15px rgba(0, 240, 255, 0.1),
-        inset 0 0 30px rgba(0, 240, 255, 0.03);
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 4px 15px rgba(0, 240, 255, 0.1);
 }
 
 .experience-item[data-index="4"] .experience-content::before{
-    border-radius: 10px 25px 0 0;
-    background: linear-gradient(90deg, var(--neon-red) 0%, var(--neon-pink) 50%, var(--neon-red) 100%);
-    background-size: 200% 100%;
-    animation: shimmer 2.5s linear infinite;
+    display: none;
 }
 
 .experience-item[data-index="5"] .experience-content{
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(0, 240, 255, 0.1);
-    border-right: 4px solid var(--neon-red);
-    border-radius: 15px 0 0 15px;
+    border-radius: 0 0 15px 15px;
     position: relative;
 }
 
@@ -2352,15 +2303,7 @@ p{
 }
 
 .experience-item[data-index="5"] .experience-content::after{
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: -2px;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 60%;
-    background: linear-gradient(180deg, transparent, var(--neon-red), transparent);
-    animation: glow 2s ease-in-out infinite;
+    display: none;
 }
 
 @keyframes shimmer {
@@ -2393,22 +2336,21 @@ p{
 }
 
 .company-logo{
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 120px;
-    height: 120px;
+    position: relative;
+    width: 100%;
+    height: 80px;
     object-fit: contain;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 8px;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
     z-index: 1;
     transition: var(--transition);
+    margin-bottom: 15px;
 }
 
 .experience-item:hover .company-logo{
     transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(0,240,255,0.3);
+    filter: drop-shadow(0 0 15px rgba(0,240,255,0.3));
 }
 
 .experience-content::before{
@@ -2417,20 +2359,21 @@ p{
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: 0;
     background: linear-gradient(90deg, var(--neon-red), var(--neon-pink));
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.3s ease;
-    border-radius: 15px 15px 0 0;
+    border-radius: 0 0 15px 15px;
+    display: none;
 }
 
 /* Default hover effect */
 .experience-item:hover .experience-content{
     background: rgba(0, 240, 255, 0.05);
     border-color: var(--neon-red);
-    transform: translateX(10px);
-    box-shadow: 0 10px 40px rgba(0,240,255,0.3);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 50px rgba(0,240,255,0.3);
 }
 
 .experience-item:hover .experience-content::before{
@@ -2439,41 +2382,34 @@ p{
 
 /* Unique hover effects for different cards */
 .experience-item[data-index="0"]:hover .experience-content{
-    transform: translateX(10px) scale(1.02);
-    box-shadow: 0 15px 50px rgba(0,240,255,0.4), 0 0 30px rgba(0,240,255,0.2);
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(0,240,255,0.4), 0 0 30px rgba(0,240,255,0.2);
     border-color: var(--neon-pink);
 }
 
 .experience-item[data-index="1"]:hover .experience-content{
-    transform: translateX(15px) rotate(1deg);
-    box-shadow: -8px 8px 30px rgba(0,240,255,0.4);
-    border-left-width: 6px;
+    transform: translateY(-10px) rotate(1deg);
+    box-shadow: 0 20px 50px rgba(0,240,255,0.4);
 }
 
 .experience-item[data-index="2"]:hover .experience-content{
-    transform: translateY(-5px) translateX(10px);
-    box-shadow: 0 15px 50px rgba(0,240,255,0.4), inset 0 2px 20px rgba(0,240,255,0.1);
-    border-top-width: 5px;
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(0,240,255,0.4);
 }
 
 .experience-item[data-index="3"]:hover .experience-content{
-    transform: translateX(10px);
-    border-style: solid;
-    box-shadow: 0 10px 40px rgba(0,240,255,0.3);
+    transform: translateY(-10px);
+    box-shadow: 0 15px 50px rgba(0,240,255,0.3);
 }
 
 .experience-item[data-index="4"]:hover .experience-content{
-    transform: translateX(10px) scale(1.01);
-    border-radius: 15px 30px 15px 30px;
-    box-shadow: 
-        0 10px 40px rgba(0,240,255,0.4),
-        inset 0 0 40px rgba(0,240,255,0.08);
+    transform: translateY(-10px) scale(1.01);
+    box-shadow: 0 20px 60px rgba(0,240,255,0.4);
 }
 
 .experience-item[data-index="5"]:hover .experience-content{
-    transform: translateX(10px);
-    box-shadow: 0 10px 40px rgba(0,240,255,0.3);
-    border-right-width: 6px;
+    transform: translateY(-10px);
+    box-shadow: 0 15px 50px rgba(0,240,255,0.3);
 }
 
 /* Additional styling for cards beyond index 5 */
@@ -2504,7 +2440,7 @@ p{
 .experience-header-card{
     margin-bottom: 20px;
     position: relative;
-    padding-right: 130px;
+    padding-right: 0;
     min-height: 120px;
 }
 
@@ -2718,9 +2654,7 @@ p{
     
     .experience-header-card{
         margin-bottom: 18px;
-        padding-right: 85px;
-        min-height: 80px;
-        position: relative;
+        padding-right: 0;
     }
     
     .experience-title{
@@ -2808,17 +2742,15 @@ p{
     }
     
     .company-logo{
-        width: 75px;
-        height: 75px;
-        top: 12px;
-        right: 12px;
-        padding: 5px;
+        width: 60px;
+        height: 60px;
+        margin-bottom: 12px;
     }
     
     .experience-item:hover .experience-content{
-        -webkit-transform: translateX(5px);
-        -moz-transform: translateX(5px);
-        transform: translateX(5px);
+        -webkit-transform: translateY(-5px);
+        -moz-transform: translateY(-5px);
+        transform: translateY(-5px);
     }
 }
 
@@ -2827,15 +2759,14 @@ p{
     .experience-timeline{
         width: 100%;
         padding: 30px 0;
-    }
-    
-    .experience-timeline::before{
-        left: 20px;
+        grid-template-columns: 1fr;
+        gap: 25px;
     }
     
     .experience-section-header{
-        padding-left: 60px;
+        padding-left: 0;
         margin-bottom: 25px;
+        grid-column: 1 / -1;
     }
     
     .section-header-title{
@@ -2844,30 +2775,28 @@ p{
     }
     
     .experience-item{
-        padding-left: 60px;
+        padding-left: 0;
         width: 100%;
-        display: -webkit-box;
-        display: -ms-flexbox;
         display: flex;
-        margin-bottom: 35px;
+        flex-direction: column;
+        margin-bottom: 0;
     }
     
     .experience-icon{
-        width: 40px;
-        height: 40px;
-        left: 0;
+        width: 100%;
+        height: 100px;
         flex-shrink: 0;
     }
     
     .experience-icon i{
-        font-size: 1.1rem;
+        font-size: 2.5rem;
     }
     
     .experience-content{
-        padding: 15px 12px;
-        padding-top: 50px;
+        padding: 20px;
         width: 100%;
-        display: block;
+        display: flex;
+        flex-direction: column;
         min-width: 0;
         position: relative;
     }
@@ -2875,13 +2804,12 @@ p{
     .experience-header-card{
         margin-bottom: 15px;
         padding-top: 0;
-        padding-right: 65px;
-        min-height: 50px;
+        padding-right: 0;
         position: relative;
     }
     
     .experience-title{
-        font-size: 1.05rem;
+        font-size: 1.1rem;
         line-height: 1.4;
         word-wrap: break-word;
         overflow-wrap: break-word;
@@ -3002,21 +2930,14 @@ p{
     }
     
     .company-logo{
-        width: 50px;
-        height: 50px;
-        max-width: 20%;
-        max-height: 20%;
-        top: 10px;
-        right: 12px;
-        padding: 4px;
-        z-index: 2;
-        position: absolute;
-        flex-shrink: 0;
+        width: 100%;
+        height: 60px;
+        margin-bottom: 15px;
     }
     
-    /* Prevent logo from overlapping title */
+    /* Logo moves into the card */
     .experience-title-section{
-        max-width: calc(100% - 70px);
+        max-width: 100%;
         padding-right: 0;
         margin-right: 0;
     }
@@ -5225,7 +5146,7 @@ body, html{
     }
     
     .skills-marquee-track {
-        gap: 25px;
+        gap: 30px;
     }
     
     .skill-icon-item-marquee {
@@ -5702,7 +5623,7 @@ body, html{
 .skills-marquee-tracks-wrapper {
     display: flex;
     width: fit-content;
-    animation: scroll-left 30s linear infinite;
+    animation: scroll-left 20s linear infinite;
     will-change: transform;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
@@ -5712,18 +5633,22 @@ body, html{
 
 .skills-marquee-track {
     display: flex;
-    gap: 40px;
+    gap: 30px;
     width: fit-content;
     flex-shrink: 0;
     align-items: center;
 }
 
 .skills-marquee-tracks-wrapper[data-speed="slow"] {
-    animation-duration: 50s;
+    animation-duration: 35s;
 }
 
 .skills-marquee-tracks-wrapper[data-speed="fast"] {
-    animation-duration: 25s;
+    animation-duration: 20s;
+}
+
+.skills-marquee-tracks-wrapper[data-direction="rtl"] {
+    animation-name: scroll-right;
 }
 
 @keyframes scroll-left {
@@ -5732,6 +5657,15 @@ body, html{
     }
     100% {
         transform: translateX(-50%);
+    }
+}
+
+@keyframes scroll-right {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0);
     }
 }
 

@@ -225,6 +225,11 @@ function displayIconsView(container) {
         tracksWrapper.className = 'skills-marquee-tracks-wrapper';
         tracksWrapper.setAttribute('data-speed', 'slow');
         
+        // Alternate direction for each row: 1st=ltr, 2nd=rtl, 3rd=ltr, 4th=rtl, etc.
+        if ((categoryIndex + 1) % 2 === 0) {
+            tracksWrapper.setAttribute('data-direction', 'rtl');
+        }
+        
         // Create first track (for seamless loop)
         const track1 = document.createElement('div');
         track1.className = 'skills-marquee-track';
