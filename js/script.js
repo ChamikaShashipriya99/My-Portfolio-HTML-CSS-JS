@@ -1,4 +1,58 @@
 document.addEventListener('DOMContentLoaded', function(){
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href === '#' || href === '#hero') {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            } else if (href.startsWith('#')) {
+                e.preventDefault();
+                const targetId = href.substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    const offsetTop = targetElement.offsetTop - 80; // Account for fixed navbar
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+
+    // Active nav link highlighting based on scroll position
+    function updateActiveNavLink() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        let current = '';
+        const scrollPosition = window.pageYOffset + 100; // Offset for navbar height
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                current = section.getAttribute('id');
+            }
+        });
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            const href = link.getAttribute('href');
+            if (href === `#${current}` || (current === 'hero' && href === '#hero')) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // Update active nav link on scroll
+    window.addEventListener('scroll', updateActiveNavLink);
+    updateActiveNavLink(); // Initial call
+
     // Mobile Menu Toggle
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const navLinks = document.querySelector('.nav-links');
@@ -107,58 +161,60 @@ document.addEventListener('DOMContentLoaded', function(){
         toggleBackToTop();
     }
     
+    // Profile wrapper particles effect
     const profileWrapper = document.querySelector('.profile-wrapper');
-    const particleCount = 30;
+    if (profileWrapper) {
+        const particleCount = 30;
 
-    //Create particles
-    for(let i = 0; i < particleCount; i++){
-        const particle = document.createElemant('div');
-        particle.classList.add('particle');
+        //Create particles
+        for(let i = 0; i < particleCount; i++){
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
 
-        //Random properties
-        const size = Math.random() * 8 + 2;
-        const posX = Math.random() * 100;
-        const posY = Math.random() * 100;
-        const duration = Math.random() * 6 + 4;
-        const delay = Math.random() * 5;
-        const opacity = Math.random() * 0.5 + 0.1;
+            //Random properties
+            const size = Math.random() * 8 + 2;
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            const duration = Math.random() * 6 + 4;
+            const delay = Math.random() * 5;
+            const opacity = Math.random() * 0.5 + 0.1;
 
-        //Apply styles
-        particle.style.width = `${size}px`;
-        particle.style.heigth = `${size}px`;
-        particle.style.left = `${posX}%`;
-        particle.style.top = `${posY}%`;
-        particle.style.animationDuration = `${duration}s`;
-        particle.style.animationDelay = `${delay}s`;
-        particle.style.opacity = opacity;
-        particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
-        particle.style.animation = `float ${Math.random() * 10 + 5}s infinite ease-in-out`;
+            //Apply styles
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${posX}%`;
+            particle.style.top = `${posY}%`;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+            particle.style.opacity = opacity;
+            particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+            particle.style.animation = `float ${Math.random() * 10 + 5}s infinite ease-in-out`;
 
-        profileWrapper.appendChild(particle);
-    }
-
-    // Floating animation for particles
-    document.querySelectorAll('.particle').forEach(particle => {
-    const keyframes = `
-        @keyframes float-${Math.random().toString(36).substr(2, 5)} {
-            0% {
-                transform: translate(0, 0);
-            }
-            50% {
-                transform: translate(${Math.random() * 40 - 20}px, ${Math.random() * 40 - 20}px);
-            }
-            100% {
-                transform: translate(0, 0);
-            }
+            profileWrapper.appendChild(particle);
         }
-    `;
 
-    const styleSheet = document.createElement('style');
-    styleSheet.textContent = keyframes;
-    document.head.appendChild(styleSheet);
+        // Floating animation for particles
+        document.querySelectorAll('.particle').forEach(particle => {
+            const keyframes = `
+                @keyframes float-${Math.random().toString(36).substr(2, 5)} {
+                    0% {
+                        transform: translate(0, 0);
+                    }
+                    50% {
+                        transform: translate(${Math.random() * 40 - 20}px, ${Math.random() * 40 - 20}px);
+                    }
+                    100% {
+                        transform: translate(0, 0);
+                    }
+                }
+            `;
 
-    particle.style.animation = `float-${styleSheet.sheet.cssRules[0].NAMESPACE_RULE.match(/-(\w+)/)[1]} ${Math.random() * 10 + 5}s infinite ease-in-out`;
+            const styleSheet = document.createElement('style');
+            styleSheet.textContent = keyframes;
+            document.head.appendChild(styleSheet);
 
-    });
+            particle.style.animation = `float-${Math.random().toString(36).substr(2, 5)} ${Math.random() * 10 + 5}s infinite ease-in-out`;
+        });
+    }
 
 })
