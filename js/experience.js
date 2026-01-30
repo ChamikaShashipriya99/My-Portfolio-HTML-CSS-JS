@@ -5,8 +5,7 @@ const EXPERIENCE_DATA = [
         company: "DoMedia Company",
         location: "Malabe, Sri Lanka",
         startDate: "November 2025",
-        endDate: "Present",
-        type: "Full-time", // Full-time, Part-time, Internship, Contract, etc.
+        endDate: "January 2026",
         description: "Currently attending a comprehensive 3-month full-time Industrial Training Program focused on Full Stack Web Development. This intensive program covers both frontend and backend technologies to develop well-rounded web development skills.",
         responsibilities: [
             "Learning full stack web development through hands-on training",
@@ -145,68 +144,107 @@ function displayExperience() {
     const sortedEducation = [...education].sort(sortByDate);
     
     // Function to render experience items
-    const renderExperienceItems = (items, startIndex = 0) => {
+    const renderExperienceItems = (items, startIndex = 0, isProfessional = false) => {
         return items.map((exp, idx) => {
             const index = startIndex + idx;
             const isPresent = exp.endDate.toLowerCase() === 'present';
             const duration = calculateDuration(exp.startDate, exp.endDate);
             
-            return `
-                <div class="experience-item" data-index="${index}" data-aos="fade-up" data-aos-duration="800" data-aos-delay="${idx * 100}">
-                    <div class="experience-icon">
-                        <i class="${exp.icon}"></i>
-                    </div>
-                    <div class="experience-content">
-                        ${exp.logo ? `<img src="${exp.logo}" alt="${exp.company} logo" class="company-logo">` : ''}
-                        <div class="experience-header-card">
-                            <div class="experience-title-section">
-                                <h3 class="experience-title">${exp.title}</h3>
-                                ${exp.type && exp.type.trim() ? `<span class="experience-type">${exp.type}</span>` : ''}
-                            </div>
-                            <div class="experience-company">
-                                <i class="fa-solid fa-building"></i>
-                                <span>${exp.company}</span>
-                            </div>
-                            <div class="experience-location">
-                                <i class="fa-solid fa-location-dot"></i>
-                                <span>${exp.location}</span>
-                            </div>
+            // For professional experience, create a card format
+            if (isProfessional) {
+                return `
+                    <div class="experience-item experience-card-item" data-index="${index}" data-aos="fade-up" data-aos-duration="800" data-aos-delay="${idx * 100}">
+                        <div class="experience-icon">
+                            <i class="${exp.icon}"></i>
                         </div>
-                        
-                        <div class="experience-dates">
-                            <span class="date-range">
-                                <i class="fa-solid fa-calendar"></i>
-                                ${exp.startDate} - ${exp.endDate}
-                            </span>
-                            ${duration ? `<span class="duration"><i class="fa-solid fa-clock"></i>${duration}</span>` : ''}
-                        </div>
-                        
-                        <p class="experience-description">${exp.description}</p>
-                        
-                        ${exp.responsibilities && exp.responsibilities.length > 0 ? `
-                            <div class="experience-responsibilities">
-                                <h4 class="responsibilities-title">
-                                    <i class="fa-solid fa-list-check"></i>Key Highlights
-                                </h4>
-                                <ul class="responsibilities-list">
-                                    ${exp.responsibilities.map(resp => `<li>${resp}</li>`).join('')}
-                                </ul>
-                            </div>
-                        ` : ''}
-                        
-                        ${exp.technologies && exp.technologies.length > 0 ? `
-                            <div class="experience-technologies">
-                                <h4 class="technologies-title">
-                                    <i class="fa-solid fa-tools"></i>Technologies Used
-                                </h4>
-                                <div class="tech-tags">
-                                    ${exp.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+                        <div class="experience-content experience-card-content">
+                            ${exp.logo ? `<img src="${exp.logo}" alt="${exp.company} logo" class="company-logo">` : ''}
+                            <div class="experience-header-card">
+                                <div class="experience-title-section">
+                                    <h3 class="experience-title">${exp.title}</h3>
+                                    ${exp.type && exp.type.trim() ? `<span class="experience-type">${exp.type}</span>` : ''}
+                                </div>
+                                <div class="experience-company">
+                                    <i class="fa-solid fa-building"></i>
+                                    <span>${exp.company}</span>
                                 </div>
                             </div>
+                            <button class="read-more-btn" onclick="openExperienceModal(event, ${index})">
+                                <i class="fa-solid fa-arrow-right"></i>
+                                Click to Read More
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden Modal Data -->
+                    <div class="experience-modal-data" data-modal-index="${index}" style="display: none;">
+                        ${exp.logo ? `<img src="${exp.logo}" alt="${exp.company} logo" class="modal-company-logo">` : ''}
+                        <div class="modal-title">${exp.title}</div>
+                        <div class="modal-company">${exp.company}</div>
+                        <div class="modal-location">${exp.location}</div>
+                        <div class="modal-dates">${exp.startDate} - ${exp.endDate}</div>
+                        ${exp.type && exp.type.trim() ? `<div class="modal-type">${exp.type}</div>` : ''}
+                        ${duration ? `<div class="modal-duration">${duration}</div>` : ''}
+                        <div class="modal-description">${exp.description}</div>
+                        ${exp.responsibilities && exp.responsibilities.length > 0 ? `
+                            <div class="modal-responsibilities">
+                                <h4><i class="fa-solid fa-list-check"></i>Key Highlights</h4>
+                                <ul>${exp.responsibilities.map(resp => `<li>${resp}</li>`).join('')}</ul>
+                            </div>
+                        ` : ''}
+                        ${exp.technologies && exp.technologies.length > 0 ? `
+                            <div class="modal-technologies">
+                                <h4><i class="fa-solid fa-tools"></i>Technologies Used</h4>
+                                <div class="tech-tags">${exp.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}</div>
+                            </div>
                         ` : ''}
                     </div>
-                </div>
-            `;
+                `;
+            } else {
+                // For education, use same card format as professional
+                return `
+                    <div class="experience-item experience-card-item" data-index="${index}" data-aos="fade-up" data-aos-duration="800" data-aos-delay="${idx * 100}">
+                        <div class="experience-icon">
+                            <i class="${exp.icon}"></i>
+                        </div>
+                        <div class="experience-content experience-card-content">
+                            ${exp.logo ? `<img src="${exp.logo}" alt="${exp.company} logo" class="company-logo">` : ''}
+                            <div class="experience-header-card">
+                                <div class="experience-title-section">
+                                    <h3 class="experience-title">${exp.title}</h3>
+                                    ${exp.type && exp.type.trim() ? `<span class="experience-type">${exp.type}</span>` : ''}
+                                </div>
+                                <div class="experience-company">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <span>${exp.company}</span>
+                                </div>
+                            </div>
+                            <button class="read-more-btn" onclick="openExperienceModal(event, ${index})">
+                                <i class="fa-solid fa-arrow-right"></i>
+                                Click to Read More
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden Modal Data -->
+                    <div class="experience-modal-data" data-modal-index="${index}" style="display: none;">
+                        ${exp.logo ? `<img src="${exp.logo}" alt="${exp.company} logo" class="modal-company-logo">` : ''}
+                        <div class="modal-title">${exp.title}</div>
+                        <div class="modal-company">${exp.company}</div>
+                        <div class="modal-location">${exp.location}</div>
+                        <div class="modal-dates">${exp.startDate} - ${exp.endDate}</div>
+                        ${exp.type && exp.type.trim() ? `<div class="modal-type">${exp.type}</div>` : ''}
+                        ${duration ? `<div class="modal-duration">${duration}</div>` : ''}
+                        <div class="modal-description">${exp.description}</div>
+                        ${exp.responsibilities && exp.responsibilities.length > 0 ? `
+                            <div class="modal-responsibilities">
+                                <h4><i class="fa-solid fa-list-check"></i>Key Highlights</h4>
+                                <ul>${exp.responsibilities.map(resp => `<li>${resp}</li>`).join('')}</ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
         }).join('');
     };
     
@@ -215,13 +253,13 @@ function displayExperience() {
             <div class="experience-section-header">
                 <h2 class="section-header-title">Professional Experience</h2>
             </div>
-            ${renderExperienceItems(sortedProfessional, 0)}
+            ${renderExperienceItems(sortedProfessional, 0, true)}
         ` : ''}
         ${sortedEducation.length > 0 ? `
             <div class="experience-section-header" style="margin-top: 60px;">
                 <h2 class="section-header-title">Education</h2>
             </div>
-            ${renderExperienceItems(sortedEducation, sortedProfessional.length)}
+            ${renderExperienceItems(sortedEducation, sortedProfessional.length, true)}
         ` : ''}
     `;
     
@@ -296,5 +334,83 @@ function parseDate(dateString) {
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     displayExperience();
+    initializeExperienceModals();
 });
+
+// Initialize modal functionality
+function initializeExperienceModals() {
+    // Close modal when clicking on the overlay
+    const modal = document.getElementById('experience-modal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeExperienceModal();
+            }
+        });
+    }
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeExperienceModal();
+        }
+    });
+}
+
+// Open experience modal
+function openExperienceModal(event, index) {
+    event.preventDefault();
+    
+    const modalData = document.querySelector(`.experience-modal-data[data-modal-index="${index}"]`);
+    if (!modalData) return;
+    
+    const modal = document.getElementById('experience-modal') || createExperienceModal();
+    const modalContent = modal.querySelector('.modal-content-inner');
+    
+    // Copy the modal data content
+    const html = `
+        <button class="modal-close-btn" onclick="closeExperienceModal()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        ${modalData.innerHTML}
+    `;
+    
+    modalContent.innerHTML = html;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+// Close experience modal
+function closeExperienceModal() {
+    const modal = document.getElementById('experience-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Create modal element if it doesn't exist
+function createExperienceModal() {
+    const existingModal = document.getElementById('experience-modal');
+    if (existingModal) return existingModal;
+    
+    const modal = document.createElement('div');
+    modal.id = 'experience-modal';
+    modal.className = 'experience-modal';
+    modal.innerHTML = `
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-content-inner"></div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target.closest('.modal-overlay')) {
+            closeExperienceModal();
+        }
+    });
+    
+    return modal;
+}
 

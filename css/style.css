@@ -2353,6 +2353,373 @@ p{
     filter: drop-shadow(0 0 15px rgba(0,240,255,0.3));
 }
 
+/* ============================================
+   Professional Experience Card View
+   ============================================ */
+.experience-modal-data {
+    display: none !important;
+}
+
+.experience-card-item {
+    cursor: pointer;
+}
+
+.experience-card-content {
+    position: relative;
+    overflow: hidden;
+}
+
+.experience-card-content::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.experience-card-item:hover .experience-card-content::after {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(3px);
+}
+
+/* Hide detailed content for professional experience cards */
+.experience-card-item .experience-location,
+.experience-card-item .experience-dates,
+.experience-card-item .experience-description,
+.experience-card-item .experience-responsibilities,
+.experience-card-item .experience-technologies {
+    display: none;
+}
+
+/* Read More Button */
+.read-more-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    z-index: 10;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--neon-red), var(--neon-pink));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(0, 240, 255, 0.3);
+}
+
+.read-more-btn i {
+    transition: transform 0.3s ease;
+}
+
+.experience-card-item:hover .read-more-btn {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.read-more-btn:hover {
+    box-shadow: 0 8px 30px rgba(0, 240, 255, 0.5);
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.read-more-btn:hover i {
+    transform: translateX(4px);
+}
+
+.read-more-btn:active {
+    transform: translate(-50%, -50%) scale(0.98);
+}
+
+/* ============================================
+   Experience Modal
+   ============================================ */
+.experience-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: -1;
+}
+
+.modal-container {
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.98), rgba(20, 20, 20, 0.95));
+    border: 2px solid rgba(0, 240, 255, 0.2);
+    border-radius: 20px;
+    padding: 50px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    z-index: 10;
+    box-shadow: 
+        0 25px 50px rgba(0, 240, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-content-inner {
+    position: relative;
+}
+
+.modal-company-logo {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto 30px;
+    display: block;
+    border-radius: 12px;
+    background: rgba(0, 240, 255, 0.1);
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0, 240, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.modal-company-logo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 240, 255, 0.3);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 240, 255, 0.1);
+    border: 2px solid var(--neon-red);
+    border-radius: 50%;
+    color: var(--neon-red);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 11;
+}
+
+.modal-close-btn:hover {
+    background: var(--neon-red);
+    color: white;
+    transform: rotate(90deg);
+}
+
+.modal-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, var(--neon-red), var(--neon-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.modal-company {
+    font-size: 1.3rem;
+    color: var(--neon-red);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-company::before {
+    content: '🏢';
+}
+
+.modal-location {
+    font-size: 1rem;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-location::before {
+    content: '📍';
+}
+
+.modal-dates {
+    font-size: 1rem;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-dates::before {
+    content: '📅';
+}
+
+.modal-type {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px solid var(--neon-red);
+    color: var(--neon-red);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.modal-duration {
+    display: block;
+    padding: 10px 0;
+    color: var(--neon-red);
+    font-weight: 600;
+    border-top: 1px solid rgba(0, 240, 255, 0.2);
+    margin: 20px 0;
+}
+
+.modal-description {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-light);
+    margin-bottom: 30px;
+}
+
+.modal-responsibilities h4,
+.modal-technologies h4 {
+    font-size: 1.2rem;
+    color: var(--neon-red);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-responsibilities h4 i,
+.modal-technologies h4 i {
+    font-size: 1.1rem;
+}
+
+.modal-responsibilities ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 25px;
+}
+
+.modal-responsibilities li {
+    padding: 10px 0 10px 30px;
+    position: relative;
+    color: var(--text-light);
+    line-height: 1.7;
+}
+
+.modal-responsibilities li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--neon-red);
+    font-weight: bold;
+}
+
+.modal-technologies {
+    border-top: 1px solid rgba(0, 240, 255, 0.2);
+    padding-top: 25px;
+}
+
+.modal-technologies .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tech-tag {
+    padding: 8px 16px;
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid var(--neon-red);
+    color: var(--neon-red);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.tech-tag:hover {
+    background: var(--neon-red);
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3);
+}
+
+/* Modal scrollbar styling */
+.modal-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-container::-webkit-scrollbar-track {
+    background: rgba(0, 240, 255, 0.1);
+    border-radius: 10px;
+}
+
+.modal-container::-webkit-scrollbar-thumb {
+    background: var(--neon-red);
+    border-radius: 10px;
+}
+
+.modal-container::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-pink);
+}
+
+.experience-item:hover .company-logo{
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 15px rgba(0,240,255,0.3));
+}
+
 .experience-content::before{
     content: '';
     position: absolute;
@@ -2615,6 +2982,31 @@ p{
 
 /* Experience Section - Tablet (768px - 1199px) */
 @media (min-width: 768px) and (max-width: 1199px){
+    .modal-container {
+        max-width: 650px;
+        padding: 40px;
+    }
+    
+    .modal-company-logo {
+        max-width: 180px;
+        margin-bottom: 28px;
+    }
+    
+    .modal-title {
+        font-size: 1.7rem;
+    }
+    
+    .modal-company {
+        font-size: 1.2rem;
+    }
+    
+    .read-more-btn {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+    }
+}
+
+
     .experience-timeline{
         padding: 50px 0;
     }
@@ -2751,6 +3143,73 @@ p{
         -webkit-transform: translateY(-5px);
         -moz-transform: translateY(-5px);
         transform: translateY(-5px);
+    }
+    
+    /* Mobile Modal Styles */
+    .modal-container {
+        padding: 40px 25px;
+        max-width: 95%;
+        border-radius: 15px;
+    }
+    
+    .modal-company-logo {
+        max-width: 150px;
+        margin-bottom: 25px;
+        padding: 12px;
+    }
+    
+    .modal-close-btn {
+        top: -25px;
+        right: -25px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .modal-title {
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+    }
+    
+    .modal-company {
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+    }
+    
+    .modal-location,
+    .modal-dates {
+        font-size: 0.9rem;
+    }
+    
+    .modal-description {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+    
+    .modal-responsibilities h4,
+    .modal-technologies h4 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    .modal-responsibilities li {
+        padding: 8px 0 8px 25px;
+        font-size: 0.9rem;
+    }
+    
+    .modal-technologies .tech-tags {
+        gap: 8px;
+    }
+    
+    .tech-tag {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+    
+    .read-more-btn {
+        padding: 12px 20px;
+        font-size: 0.9rem;
     }
 }
 
