@@ -1,18 +1,39 @@
 // GitHub username - UPDATE THIS WITH YOUR GITHUB USERNAME
 const GITHUB_USERNAME = 'ChamikaShashipriya99';
 
+// GitHub Personal Access Token - UPDATE THIS WITH YOUR TOKEN
+// Create a token at: https://github.com/settings/tokens
+// Scopes needed: public_repo, read:user
+const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';
+
 // GitHub API endpoint
 const GITHUB_API_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`;
 
 let allProjects = [];
 let currentFilter = 'all';
 
+// Helper function to get fetch headers with authentication
+function getAuthHeaders() {
+    const headers = {
+        'Accept': 'application/vnd.github.v3+json'
+    };
+    
+    // Only add authorization header if token is set and not the placeholder
+    if (GITHUB_TOKEN && GITHUB_TOKEN !== 'YOUR_GITHUB_TOKEN_HERE') {
+        headers['Authorization'] = `token ${GITHUB_TOKEN}`;
+    }
+    
+    return headers;
+}
+
 // Fetch README content for a repository
 async function fetchReadme(owner, repo) {
     try {
         // Try to fetch README.md
         const readmeUrl = `https://api.github.com/repos/${owner}/${repo}/readme`;
-        const response = await fetch(readmeUrl);
+        const response = await fetch(readmeUrl, {
+            headers: getAuthHeaders()
+        });
         
         if (!response.ok) {
             return null;
@@ -86,7 +107,9 @@ async function fetchProjects() {
         }
 
         console.log('Fetching from:', GITHUB_API_URL);
-        const response = await fetch(GITHUB_API_URL);
+        const response = await fetch(GITHUB_API_URL, {
+            headers: getAuthHeaders()
+        });
         
         console.log('Response status:', response.status, response.statusText);
         
@@ -225,7 +248,11 @@ function displayProjects(projects) {
         return;
     }
 
-    projectsGrid.innerHTML = projects.map(project => {
+    // Show only 10 projects initially
+    const maxItemsToShow = 10;
+    const hasMoreProjects = projects.length > maxItemsToShow;
+
+    projectsGrid.innerHTML = projects.map((project, index) => {
         const language = project.language || 'Other';
         // Use README description if available, otherwise use GitHub description, or default
         const description = project.readmeDescription || project.description || 'No description available';
@@ -235,18 +262,28 @@ function displayProjects(projects) {
             day: 'numeric'
         });
         
-        // Generate project image URL (GitHub social preview or placeholder)
-        // You can also use: https://opengraph.githubassets.com/1/${project.owner.login}/${project.name}
-        const projectImage = `https://opengraph.githubassets.com/1/${project.owner.login}/${project.name}`;
+        // Generate project image URLs
+        // Priority:
+        // 1. thumbnail.png in the repository root (default branch)
+        // 2. GitHub Social Preview (Open Graph image)
+        // 3. Placeholder with project name
+        
+        const defaultBranch = project.default_branch || 'main';
+        const repoImage = `https://raw.githubusercontent.com/${project.owner.login}/${project.name}/${defaultBranch}/thumbnail.png`;
+        const opengraphImage = `https://opengraph.githubassets.com/1/${project.owner.login}/${project.name}`;
         const fallbackImage = `https://via.placeholder.com/400x200/0a0a0a/ff003c?text=${encodeURIComponent(project.name)}`;
 
+        // Add hidden-project class for items beyond the initial 2 rows
+        const isHidden = index >= maxItemsToShow;
+        const hiddenClass = isHidden ? 'project-card-hidden' : '';
+
         return `
-            <div class="project-card" data-language="${language}" data-aos="fade-up" data-aos-duration="800">
+            <div class="project-card ${hiddenClass}" data-language="${language}" data-aos="fade-up" data-aos-duration="800">
                 <div class="project-image-container">
-                    <img src="${projectImage}" 
+                    <img src="${repoImage}" 
                          alt="${project.name}" 
                          class="project-image"
-                         onerror="this.src='${fallbackImage}'">
+                         onerror="this.onerror=null; this.src='${opengraphImage}'; this.onerror=function(){this.src='${fallbackImage}'}">
                     <div class="project-image-overlay">
                         <a href="${project.html_url}" target="_blank" class="project-image-link">
                             <i class="fa-solid fa-external-link"></i>
@@ -290,12 +327,52 @@ function displayProjects(projects) {
             </div>
         `;
     }).join('');
+
+    // Add "Show More Projects" button if there are more projects
+    if (hasMoreProjects) {
+        const viewMoreBtn = document.createElement('button');
+        viewMoreBtn.className = 'view-more-btn';
+        viewMoreBtn.innerHTML = `
+            <i class="fa-solid fa-chevron-down"></i>
+            Show More Projects
+        `;
+        viewMoreBtn.addEventListener('click', () => toggleViewMore());
+        projectsGrid.appendChild(viewMoreBtn);
+    }
     
     // Refresh AOS after dynamically adding content
     if (typeof AOS !== 'undefined') {
         setTimeout(() => {
             AOS.refresh();
         }, 100);
+    }
+}
+
+// Toggle view more projects
+function toggleViewMore() {
+    const projectsGrid = document.getElementById('projects-grid');
+    const isExpanded = projectsGrid.classList.contains('expanded');
+    
+    if (!isExpanded) {
+        projectsGrid.classList.add('expanded');
+        const viewMoreBtn = document.querySelector('.view-more-btn');
+        if (viewMoreBtn) {
+            const hiddenCount = document.querySelectorAll('.project-card-hidden').length;
+            viewMoreBtn.innerHTML = `
+                <i class="fa-solid fa-chevron-up"></i>
+                Show Less
+            `;
+        }
+    } else {
+        projectsGrid.classList.remove('expanded');
+        const viewMoreBtn = document.querySelector('.view-more-btn');
+        if (viewMoreBtn) {
+            viewMoreBtn.innerHTML = `
+                <i class="fa-solid fa-chevron-down"></i>
+                Show More Projects
+            `;
+        }
+        window.scrollTo({ top: document.getElementById('projects').offsetTop - 100, behavior: 'smooth' });
     }
 }
 
