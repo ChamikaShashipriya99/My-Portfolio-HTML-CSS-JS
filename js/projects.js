@@ -1,10 +1,15 @@
 // GitHub username - UPDATE THIS WITH YOUR GITHUB USERNAME
 const GITHUB_USERNAME = 'ChamikaShashipriya99';
 
-// GitHub Personal Access Token - UPDATE THIS WITH YOUR TOKEN
+// GitHub Personal Access Token
 // Create a token at: https://github.com/settings/tokens
 // Scopes needed: public_repo, read:user
-const GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';
+let GITHUB_TOKEN = 'YOUR_GITHUB_TOKEN_HERE';
+
+// Check if config exists and has token
+if (typeof CONFIG !== 'undefined' && CONFIG.GITHUB_TOKEN) {
+    GITHUB_TOKEN = CONFIG.GITHUB_TOKEN;
+}
 
 // GitHub API endpoint
 const GITHUB_API_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`;

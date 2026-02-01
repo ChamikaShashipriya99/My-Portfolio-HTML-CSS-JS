@@ -1,0 +1,10 @@
+# Ignore config file with secret token
+js/config.js
+
+# OS generated files
+Thumbs.db
+.DS_Store
+
+# Editor directories
+.idea/
+.vscode/
