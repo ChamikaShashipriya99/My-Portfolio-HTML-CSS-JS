@@ -68,7 +68,7 @@
             <a href="#experience" class="nav-link">Experience</a>
             <a href="#projects" class="nav-link">Projects</a>
             <a href="#contact" class="nav-link">Contact</a>
-            <a href="assets/cv.pdf" class="nav-link" target="_blank">Resume</a>
+            <!-- <a href="assets/Chamika-cv.pdf" class="nav-link" target="_blank">Resume</a> -->
         </div>
     </nav>
 
@@ -361,7 +361,11 @@
                             <label for="subject">
                                 <i class="fa-solid fa-tag"></i>Subject
                             </label>
-                            <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+                            <select id="subject" name="subject" required>
+                                <option value="" disabled selected>What's this about?</option>
+                                <option value="Services">Services</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
 
                         <div class="form-group">

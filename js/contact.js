@@ -35,36 +35,35 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.disabled = true;
 
             try {
-                // Here you can integrate with a backend service like:
-                // - EmailJS
-                // - Formspree
-                // - Your own backend API
-                
-                // For now, we'll simulate a successful submission
-                // Replace this with actual form submission logic
-                
-                // Example with EmailJS (uncomment and configure):
-                /*
-                emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-                    from_name: formData.name,
-                    from_email: formData.email,
-                    subject: formData.subject,
-                    message: formData.message
+                // Send data to Formspree
+                const response = await fetch("https://formspree.io/f/mgozgrzz", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify(formData)
                 });
-                */
 
-                // Simulate API call delay
-                await new Promise(resolve => setTimeout(resolve, 1500));
-
-                // Show success message
-                showMessage('Thank you! Your message has been sent successfully. I\'ll get back to you soon.', 'success');
-                
-                // Reset form
-                contactForm.reset();
+                if (response.ok) {
+                    // Show success message
+                    showMessage('Thank you! Your message has been sent successfully. I\'ll get back to you soon.', 'success');
+                    // Reset form
+                    contactForm.reset();
+                } else {
+                    // Start of error handling
+                    const data = await response.json();
+                    if (Object.hasOwn(data, 'errors')) {
+                        const errorMessages = data.errors.map(error => error.message).join(", ");
+                        throw new Error(errorMessages);
+                    } else {
+                        throw new Error('Form submission failed');
+                    }
+                }
 
             } catch (error) {
                 console.error('Error sending message:', error);
-                showMessage('Oops! Something went wrong. Please try again later or contact me directly via email.', 'error');
+                showMessage(error.message || 'Oops! Something went wrong. Please try again later.', 'error');
             } finally {
                 // Reset button
                 submitBtn.innerHTML = originalText;
