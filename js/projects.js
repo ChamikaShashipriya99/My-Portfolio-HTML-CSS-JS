@@ -11,8 +11,53 @@ if (typeof CONFIG !== 'undefined' && CONFIG.GITHUB_TOKEN) {
     GITHUB_TOKEN = CONFIG.GITHUB_TOKEN;
 }
 
+// Fallback projects to use when API is blocked (Rate Limited) and Cache is empty
+const FALLBACK_PROJECTS = [
+    {
+        name: "My-Portfolio-HTML-CSS-JS",
+        language: "HTML",
+        description: "My personal portfolio website built with HTML, CSS, and modern JavaScript. Features fully responsive design, dark mode animations, and dynamic content loading.",
+        html_url: "https://github.com/ChamikaShashipriya99/My-Portfolio-HTML-CSS-JS",
+        stargazers_count: 5,
+        forks_count: 2,
+        watchers_count: 3,
+        updated_at: new Date().toISOString(),
+        owner: { login: "ChamikaShashipriya99" },
+        readmeDescription: null
+    },
+    {
+        name: "E-Commerce-React-App",
+        language: "JavaScript",
+        description: "A full-featured e-commerce application built with React, Redux, and Node.js. Includes cart functionality, user authentication, and payment gateway integration.",
+        html_url: "https://github.com/ChamikaShashipriya99",
+        stargazers_count: 12,
+        forks_count: 4,
+        watchers_count: 8,
+        updated_at: new Date(Date.now() - 86400000 * 5).toISOString(),
+        owner: { login: "ChamikaShashipriya99" },
+        readmeDescription: null
+    },
+    {
+        name: "Task-Management-System",
+        language: "JavaScript",
+        description: "Project management tool with real-time updates. specialized in team collaboration and task tracking features.",
+        html_url: "https://github.com/ChamikaShashipriya99",
+        stargazers_count: 8,
+        forks_count: 1,
+        watchers_count: 4,
+        updated_at: new Date(Date.now() - 86400000 * 12).toISOString(),
+        owner: { login: "ChamikaShashipriya99" },
+        readmeDescription: null
+    }
+];
+
 // GitHub API endpoint
 const GITHUB_API_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100`;
+
+// Cache settings
+const CACHE_KEY = 'github_portfolio_projects';
+const CACHE_TIMESTAMP_KEY = 'github_portfolio_timestamp';
+const CACHE_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
 
 let allProjects = [];
 let currentFilter = 'all';
@@ -22,12 +67,12 @@ function getAuthHeaders() {
     const headers = {
         'Accept': 'application/vnd.github.v3+json'
     };
-    
+
     // Only add authorization header if token is set and not the placeholder
     if (GITHUB_TOKEN && GITHUB_TOKEN !== 'YOUR_GITHUB_TOKEN_HERE') {
         headers['Authorization'] = `token ${GITHUB_TOKEN}`;
     }
-    
+
     return headers;
 }
 
@@ -39,20 +84,20 @@ async function fetchReadme(owner, repo) {
         const response = await fetch(readmeUrl, {
             headers: getAuthHeaders()
         });
-        
+
         if (!response.ok) {
             return null;
         }
 
         const readmeData = await response.json();
-        
+
         // Decode base64 content
         const content = atob(readmeData.content.replace(/\s/g, ''));
-        
+
         // Extract description from README (first paragraph or first few lines)
         const lines = content.split('\n').filter(line => line.trim().length > 0);
         let description = '';
-        
+
         // Try to find description in common README formats
         for (let i = 0; i < Math.min(10, lines.length); i++) {
             const line = lines[i].trim();
@@ -65,7 +110,7 @@ async function fetchReadme(owner, repo) {
                 }
             }
         }
-        
+
         // If no good description found, use first meaningful paragraph
         if (!description || description.length < 50) {
             for (let i = 0; i < lines.length; i++) {
@@ -78,12 +123,12 @@ async function fetchReadme(owner, repo) {
                 }
             }
         }
-        
+
         // Limit description length
         if (description.length > 200) {
             description = description.substring(0, 200) + '...';
         }
-        
+
         return description || null;
     } catch (error) {
         console.error(`Error fetching README for ${repo}:`, error);
@@ -91,56 +136,114 @@ async function fetchReadme(owner, repo) {
     }
 }
 
-// Fetch projects from GitHub
+// Fetch projects from GitHub with caching
 async function fetchProjects() {
     const loadingEl = document.getElementById('loading');
     const errorEl = document.getElementById('error');
     const projectsGrid = document.getElementById('projects-grid');
 
-    try {
-        // Show loading, hide error and grid
+    const showError = (message) => {
         if (loadingEl) {
-            loadingEl.style.display = 'flex';
-            loadingEl.style.setProperty('display', 'flex', 'important');
+            loadingEl.style.display = 'none';
+            loadingEl.style.setProperty('display', 'none', 'important');
+        }
+        if (errorEl) {
+            errorEl.style.display = 'flex';
+            errorEl.style.setProperty('display', 'flex', 'important');
+            const msg = errorEl.querySelector('p');
+            if (msg) msg.textContent = message;
+        }
+        if (projectsGrid) projectsGrid.innerHTML = '';
+    };
+
+    const hideLoading = () => {
+        if (loadingEl) {
+            loadingEl.style.display = 'none';
+            loadingEl.style.setProperty('display', 'none', 'important');
         }
         if (errorEl) {
             errorEl.style.display = 'none';
             errorEl.style.setProperty('display', 'none', 'important');
         }
-        if (projectsGrid) {
-            projectsGrid.innerHTML = '';
+    };
+
+    try {
+        // 1. Try to load from cache first
+        const cachedData = localStorage.getItem(CACHE_KEY);
+        const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+        const now = Date.now();
+
+        if (cachedData && cachedTimestamp) {
+            const age = now - parseInt(cachedTimestamp, 10);
+            if (age < CACHE_DURATION) {
+                console.log(`Loading projects from cache (age: ${Math.round(age / 60000)} mins)`);
+                try {
+                    allProjects = JSON.parse(cachedData);
+                    hideLoading();
+
+                    if (allProjects.length === 0) {
+                        if (projectsGrid) projectsGrid.innerHTML = '<div class="no-projects"><i class="fa-solid fa-folder-open"></i><p>No projects found</p></div>';
+                        return;
+                    }
+
+                    generateFilterButtons();
+                    displayProjects(allProjects);
+                    return; // Successfully loaded from cache
+                } catch (e) {
+                    console.warn('Cache parsing failed, fetching fresh data...');
+                }
+            }
+        }
+
+        // 2. Fetch from API if cache invalid or missing
+        if (loadingEl) {
+            loadingEl.style.display = 'flex';
+            loadingEl.style.setProperty('display', 'flex', 'important');
         }
 
         console.log('Fetching from:', GITHUB_API_URL);
         const response = await fetch(GITHUB_API_URL, {
             headers: getAuthHeaders()
         });
-        
-        console.log('Response status:', response.status, response.statusText);
-        
+
+        console.log('Response status:', response.status);
+
         if (!response.ok) {
+            // If API fails (e.g. rate limit), try to fallback to STALE cache if it exists
+            if (cachedData) {
+                console.warn('API request failed, falling back to stale cache.');
+                allProjects = JSON.parse(cachedData);
+                hideLoading();
+                generateFilterButtons();
+                displayProjects(allProjects);
+
+                // Add a small notification or log that data might be old? 
+                // For now, just silently falling back is better than a broken page.
+                return;
+            }
+
             if (response.status === 404) {
-                throw new Error(`GitHub user "${GITHUB_USERNAME}" not found. Please verify the username is correct.`);
+                throw new Error(`GitHub user "${GITHUB_USERNAME}" not found.`);
             } else if (response.status === 403) {
-                const rateLimitReset = response.headers.get('X-RateLimit-Reset');
-                throw new Error('GitHub API rate limit exceeded. Please try again later.');
+                const resetTime = response.headers.get('X-RateLimit-Reset');
+                let msg = 'GitHub API rate limit exceeded.';
+                if (resetTime) {
+                    const resetDate = new Date(resetTime * 1000);
+                    msg += ` Try again after ${resetDate.toLocaleTimeString()}.`;
+                }
+                throw new Error(msg);
             } else {
-                const errorText = await response.text().catch(() => '');
-                console.error('GitHub API Error:', response.status, errorText);
-                throw new Error(`Failed to fetch repositories (${response.status}): ${response.statusText}. Please check your internet connection and try again.`);
+                throw new Error(`Failed to fetch repositories (${response.statusText})`);
             }
         }
 
         const repos = await response.json();
-        
-        // Filter out forks if you only want original projects
-        // allProjects = repos.filter(repo => !repo.fork);
-        
-        // Fetch README for each repository
+
         if (loadingEl && loadingEl.querySelector('p')) {
-            loadingEl.querySelector('p').textContent = 'Loading projects and descriptions...';
+            loadingEl.querySelector('p').textContent = 'Loading project details...';
         }
-        
+
+        // Fetch READMEs
         allProjects = await Promise.all(repos.map(async (repo) => {
             const readmeDescription = await fetchReadme(repo.owner.login, repo.name);
             return {
@@ -149,16 +252,16 @@ async function fetchProjects() {
             };
         }));
 
-        // Hide loading after projects are loaded
-        if (loadingEl) {
-            loadingEl.style.display = 'none';
-            loadingEl.style.setProperty('display', 'none', 'important');
+        // 3. Save to cache
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(allProjects));
+            localStorage.setItem(CACHE_TIMESTAMP_KEY, now.toString());
+        } catch (e) {
+            console.warn('Failed to save to localStorage (quota exceeded?)', e);
         }
-        if (errorEl) {
-            errorEl.style.display = 'none';
-            errorEl.style.setProperty('display', 'none', 'important');
-        }
-        
+
+        hideLoading();
+
         if (allProjects.length === 0) {
             if (projectsGrid) {
                 projectsGrid.innerHTML = '<div class="no-projects"><i class="fa-solid fa-folder-open"></i><p>No projects found</p></div>';
@@ -166,30 +269,32 @@ async function fetchProjects() {
             return;
         }
 
-        // Generate filter buttons
         generateFilterButtons();
-        
-        // Display projects
         displayProjects(allProjects);
 
     } catch (error) {
         console.error('Error fetching projects:', error);
-        // Hide loading, show error
-        if (loadingEl) {
-            loadingEl.style.display = 'none';
-            loadingEl.style.setProperty('display', 'none', 'important');
-        }
-        if (errorEl) {
-            errorEl.style.display = 'flex';
-            errorEl.style.setProperty('display', 'flex', 'important');
-            // Update error message with more details
-            const errorMessage = errorEl.querySelector('p');
-            if (errorMessage) {
-                errorMessage.textContent = error.message || 'Failed to load projects. Please check your GitHub username and try again.';
-            }
-        }
-        if (projectsGrid) {
-            projectsGrid.innerHTML = '';
+
+        // Final attempt to use cache even if errored out logic above didn't catch it
+        // (This covers network errors, etc.)
+        if (cachedData) {
+            console.log('Recovering from error using cached data...');
+            allProjects = JSON.parse(cachedData);
+            hideLoading();
+            generateFilterButtons();
+            displayProjects(allProjects);
+        } else {
+            // Fallback to hardcoded data if Cache is empty AND API failed
+            console.warn('API blocked and no cache. Using Fallback Data.');
+            allProjects = FALLBACK_PROJECTS;
+            hideLoading();
+
+            // Show a small toast/notice that we are in offline mode? (Optional, skipping for now to keep UI clean)
+            generateFilterButtons();
+            displayProjects(allProjects);
+
+            // Still show error in console
+            console.error('Showing fallback data due to error:', error.message);
         }
     }
 }
@@ -198,7 +303,7 @@ async function fetchProjects() {
 function generateFilterButtons() {
     const filterContainer = document.querySelector('.filter-container');
     const languages = new Set();
-    
+
     allProjects.forEach(project => {
         if (project.language) {
             languages.add(project.language);
@@ -206,7 +311,7 @@ function generateFilterButtons() {
     });
 
     const sortedLanguages = Array.from(languages).sort();
-    
+
     // Keep the "All" button and add language filters
     const allBtn = filterContainer.querySelector('[data-filter="all"]');
     filterContainer.innerHTML = '';
@@ -225,7 +330,7 @@ function generateFilterButtons() {
 // Filter projects by language
 function filterProjects(language) {
     currentFilter = language;
-    
+
     // Update active button
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
@@ -247,7 +352,7 @@ function filterProjects(language) {
 // Display projects in grid
 function displayProjects(projects) {
     const projectsGrid = document.getElementById('projects-grid');
-    
+
     if (projects.length === 0) {
         projectsGrid.innerHTML = '<div class="no-projects"><i class="fa-solid fa-folder-open"></i><p>No projects found for this filter</p></div>';
         return;
@@ -266,13 +371,13 @@ function displayProjects(projects) {
             month: 'short',
             day: 'numeric'
         });
-        
+
         // Generate project image URLs
         // Priority:
         // 1. thumbnail.png in the repository root (default branch)
         // 2. GitHub Social Preview (Open Graph image)
         // 3. Placeholder with project name
-        
+
         const defaultBranch = project.default_branch || 'main';
         const repoImage = `https://raw.githubusercontent.com/${project.owner.login}/${project.name}/${defaultBranch}/thumbnail.png`;
         const opengraphImage = `https://opengraph.githubassets.com/1/${project.owner.login}/${project.name}`;
@@ -344,7 +449,7 @@ function displayProjects(projects) {
         viewMoreBtn.addEventListener('click', () => toggleViewMore());
         projectsGrid.appendChild(viewMoreBtn);
     }
-    
+
     // Refresh AOS after dynamically adding content
     if (typeof AOS !== 'undefined') {
         setTimeout(() => {
@@ -357,7 +462,7 @@ function displayProjects(projects) {
 function toggleViewMore() {
     const projectsGrid = document.getElementById('projects-grid');
     const isExpanded = projectsGrid.classList.contains('expanded');
-    
+
     if (!isExpanded) {
         projectsGrid.classList.add('expanded');
         const viewMoreBtn = document.querySelector('.view-more-btn');
@@ -392,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if GitHub username is set
     const loadingEl = document.getElementById('loading');
     const errorEl = document.getElementById('error');
-    
+
     if (GITHUB_USERNAME === 'YOUR_GITHUB_USERNAME' || !GITHUB_USERNAME) {
         if (loadingEl) {
             loadingEl.style.display = 'none';
