@@ -358,8 +358,8 @@ function displayProjects(projects) {
         return;
     }
 
-    // Show only 10 projects initially
-    const maxItemsToShow = 10;
+    // projects initially to show
+    const maxItemsToShow = 12;
     const hasMoreProjects = projects.length > maxItemsToShow;
 
     projectsGrid.innerHTML = projects.map((project, index) => {
@@ -383,12 +383,14 @@ function displayProjects(projects) {
         const opengraphImage = `https://opengraph.githubassets.com/1/${project.owner.login}/${project.name}`;
         const fallbackImage = `https://via.placeholder.com/400x200/0a0a0a/ff003c?text=${encodeURIComponent(project.name)}`;
 
-        // Add hidden-project class for items beyond the initial 2 rows
+        // Add hidden-project class for items beyond the limit
         const isHidden = index >= maxItemsToShow;
+        // We use inline style display:none for simplicity as specific CSS class might not exist or be robust enough
+        const hiddenStyle = isHidden ? 'style="display: none;"' : '';
         const hiddenClass = isHidden ? 'project-card-hidden' : '';
 
         return `
-            <div class="project-card ${hiddenClass}" data-language="${language}" data-aos="fade-up" data-aos-duration="800">
+            <div class="project-card ${hiddenClass}" ${hiddenStyle} data-language="${language}" data-aos="fade-up" data-aos-duration="800">
                 <div class="project-image-container">
                     <img src="${repoImage}" 
                          alt="${project.name}" 
@@ -438,15 +440,34 @@ function displayProjects(projects) {
         `;
     }).join('');
 
-    // Add "Show More Projects" button if there are more projects
+    // Add "Show All Projects" button if there are more projects
     if (hasMoreProjects) {
         const viewMoreBtn = document.createElement('button');
         viewMoreBtn.className = 'view-more-btn';
         viewMoreBtn.innerHTML = `
             <i class="fa-solid fa-chevron-down"></i>
-            Show More Projects
+            Show All Projects
         `;
-        viewMoreBtn.addEventListener('click', () => toggleViewMore());
+        viewMoreBtn.style.marginTop = "2rem"; // Add some spacing
+        viewMoreBtn.addEventListener('click', function () {
+            // Show all hidden cards
+            const hiddenCards = document.querySelectorAll('.project-card-hidden');
+            hiddenCards.forEach(card => {
+                card.style.display = 'block'; // or 'flex' depending on layout, block is usually safe for divs in grid
+                // Optional: trigger a fade-in animation if desired, but display:block is enough for now
+                if (typeof AOS !== 'undefined') {
+                    card.removeAttribute('data-aos'); // Remove AOS to prevent issues on manual reveal or refresh it
+                }
+            });
+
+            // Hide this button
+            this.style.display = 'none';
+
+            // Refresh AOS
+            if (typeof AOS !== 'undefined') {
+                AOS.refresh();
+            }
+        });
         projectsGrid.appendChild(viewMoreBtn);
     }
 
@@ -455,34 +476,6 @@ function displayProjects(projects) {
         setTimeout(() => {
             AOS.refresh();
         }, 100);
-    }
-}
-
-// Toggle view more projects
-function toggleViewMore() {
-    const projectsGrid = document.getElementById('projects-grid');
-    const isExpanded = projectsGrid.classList.contains('expanded');
-
-    if (!isExpanded) {
-        projectsGrid.classList.add('expanded');
-        const viewMoreBtn = document.querySelector('.view-more-btn');
-        if (viewMoreBtn) {
-            const hiddenCount = document.querySelectorAll('.project-card-hidden').length;
-            viewMoreBtn.innerHTML = `
-                <i class="fa-solid fa-chevron-up"></i>
-                Show Less
-            `;
-        }
-    } else {
-        projectsGrid.classList.remove('expanded');
-        const viewMoreBtn = document.querySelector('.view-more-btn');
-        if (viewMoreBtn) {
-            viewMoreBtn.innerHTML = `
-                <i class="fa-solid fa-chevron-down"></i>
-                Show More Projects
-            `;
-        }
-        window.scrollTo({ top: document.getElementById('projects').offsetTop - 100, behavior: 'smooth' });
     }
 }
 
