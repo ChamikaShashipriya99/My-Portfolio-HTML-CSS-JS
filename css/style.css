@@ -6624,4 +6624,11 @@ html {
     .tooltip-level {
         font-size: 10px;
     }
+}/* Hero Social Icons */
+.hero-social-links {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    align-items: center;
 }
+
